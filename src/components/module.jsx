@@ -3,9 +3,11 @@
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
 import PureComponent from 'react-pure-render/component';
+import audio, {SAMPLE_RATE} from 'src/audio';
 
 
-const count = 200;
+const noiseTime = 4;
+const count = SAMPLE_RATE * noiseTime;
 export default class Module extends PureComponent {
   constructor(props) {
     super(props);
@@ -16,18 +18,41 @@ export default class Module extends PureComponent {
     }));
 
     this.state = {points};
+
+    this.play = this.play.bind(this);
+  }
+
+  componentDidMount() {
+    const {points} = this.state;
+    const buffer = audio.createBuffer(1, points.length, SAMPLE_RATE);
+    const data = buffer.getChannelData(0);
+
+    points.forEach(({x, y}, i) => {
+      data[i] = y;
+    });
+
+    this.buffer = buffer;
   }
 
   render() {
     return (
       <figure>
         <XYPlot points={this.state.points} />
+        <button onClick={this.play}>Play</button>
       </figure>
     );
+  }
+
+  play() {
+    const source = audio.createBufferSource();
+    source.buffer = this.buffer;
+    source.connect(audio.destination);
+    source.start(0);
   }
 }
 
 
+const limit = 200;
 const [width, height] = [800, 200];
 class XYPlot extends PureComponent {
   props: {
@@ -40,7 +65,6 @@ class XYPlot extends PureComponent {
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.draw();
-    console.log(this.props.points);
   }
 
   componentDidUpdate() {
@@ -55,7 +79,7 @@ class XYPlot extends PureComponent {
 
   draw() {
     const {ctx} = this;
-    const {points} = this.props;
+    const points = this.props.points.slice(0, limit);
     const halfHeight = height / 2;
     const margin = 2;
     const stepSize = (width / points.length);
