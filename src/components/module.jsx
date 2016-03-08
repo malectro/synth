@@ -10,7 +10,10 @@ export default class Module extends PureComponent {
   constructor(props) {
     super(props);
 
-    const points = (new Array(count)).map(() => Math.random() * 2 - 1);
+    const points = _.times(count, i => ({
+      x: i,
+      y: Math.random() * 2 - 1,
+    }));
 
     this.state = {points};
   }
@@ -37,6 +40,7 @@ class XYPlot extends PureComponent {
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.draw();
+    console.log(this.props.points);
   }
 
   componentDidUpdate() {
@@ -45,7 +49,7 @@ class XYPlot extends PureComponent {
 
   render() {
     return (
-      <canvas ref={(el) => this.el = el} width={width} height={height} />
+      <canvas ref={el => this.el = el} width={width} height={height} />
     );
   }
 
@@ -54,13 +58,14 @@ class XYPlot extends PureComponent {
     const {points} = this.props;
     const halfHeight = height / 2;
     const margin = 2;
-    const stepSize = (width / points.length) - margin;
+    const stepSize = (width / points.length);
 
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = 'gray';
-    points.forEach(({x, y}) => (
-      this.ctx.fillRect(x, y + halfHeight, x + stepSize, halfHeight)
-    ));
+    points.forEach(({x, y}) => {
+      const pos = x * stepSize;
+      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+    });
   }
 }
 
