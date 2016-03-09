@@ -2,7 +2,7 @@ import React from 'react';
 
 import lessonCss from './lesson.css';
 
-import Module from 'src/components/modules/noise.jsx';
+import Noise from 'src/components/synths/noise.jsx';
 
 
 export default function Lesson1() {
@@ -26,7 +26,7 @@ export default function Lesson1() {
         <p>Here’s a graph of some noise your computer just generated. You’ve probably seen something like this before in an audio player, but if you haven’t you can imagine the left side being the start of the sound and the right side being the end with all the bars indicating its volume at any given time. Because it’s noise, you shouldn’t be able to find a pattern. (i.e. Looking at the first half shouldn’t tell you anything about the second half.) When you’re ready, make sure your computer’s volume pretty low and hit “play”. You should hear what you’re seeing.</p>
       </section>
 
-      <Module />
+      <Noise />
     </article>
   );
 }
