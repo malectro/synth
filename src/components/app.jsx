@@ -2,7 +2,7 @@ import React from 'react';
 
 import './base.global.css';
 import appCss from './app.css';
-import Lesson1 from './lesson-1.jsx';
+import Lesson1 from './lessons/lesson-1.jsx';
 
 
 export default function App() {

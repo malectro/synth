@@ -3,8 +3,8 @@
 import _ from 'lodash';
 import React, {PropTypes, Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import audio, {SAMPLE_RATE} from 'src/audio';
 
+import audio, {SAMPLE_RATE} from 'src/audio';
 import css from './module.css';
 
 

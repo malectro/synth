@@ -2,7 +2,7 @@ import React from 'react';
 
 import lessonCss from './lesson.css';
 
-import Module from './module.jsx';
+import Module from 'src/components/modules/noise.jsx';
 
 
 export default function Lesson1() {
