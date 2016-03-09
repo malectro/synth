@@ -10,7 +10,7 @@ import css from './synth.css';
 import SoundPlayer from 'src/components/modules/player.jsx';
 
 
-const noiseTime = 4;
+const noiseTime = 2;
 const count = SAMPLE_RATE * noiseTime;
 export default class Module extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -18,13 +18,14 @@ export default class Module extends Component {
   constructor(props) {
     super(props);
 
-    const points = _.times(count, i => ({
+    const halfCount = Math.floor(count / 2);
+    const points = _.times(halfCount, i => ({
       x: i,
       y: Math.random() * 2 - 1,
     }));
 
     this.state = {
-      points,
+      points: points.concat(points),
     };
   }
 
@@ -34,10 +35,11 @@ export default class Module extends Component {
       <figure className={css.module}>
         <div className={css.container}>
           <SoundPlayer points={points} duration={noiseTime} />
-          <figcaption>Because this noise was generated randomly by your computer, we can safely assume it's never been seen before in the history of humanity.</figcaption>
+          <figcaption>Incidentally, this noise is probably also unique.</figcaption>
         </div>
       </figure>
     );
   }
 }
+
 

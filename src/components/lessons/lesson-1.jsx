@@ -3,6 +3,7 @@ import React from 'react';
 import lessonCss from './lesson.css';
 
 import Noise from 'src/components/synths/noise.jsx';
+import NoiseLooped from 'src/components/synths/noise-looped.jsx';
 
 
 export default function Lesson1() {
@@ -27,6 +28,16 @@ export default function Lesson1() {
       </section>
 
       <Noise />
+
+      <section>
+        <p>But what if knowing the first half did help us predict the second half? It might look something like this.</p>
+      </section>
+
+      <NoiseLooped />
+
+      <section>
+        <p>Try listening to it a couple times and see if you can hear it repeat. At the very least it should sound less uniform than the previous spout of noise – kindof like it’s rotating around and around. If you can’t hear anything strange, that’s fine too. The next example will make it easier.</p>
+      </section>
     </article>
   );
 }

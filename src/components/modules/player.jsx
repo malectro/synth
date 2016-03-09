@@ -16,6 +16,12 @@ export default class SoundPlayer extends Component {
       x: number,
       y: number,
     }>,
+    duration: number,
+    loop: boolean,
+  };
+
+  static defaultProps = {
+    loop: false,
   };
 
   constructor(props) {
@@ -69,20 +75,24 @@ export default class SoundPlayer extends Component {
   }
 
   start() {
+    const {loop, duration} = this.props;
     const source = audio.createBufferSource();
     source.buffer = this.buffer;
     source.connect(audio.destination);
+    source.loop = loop;
     source.start();
 
-    const timeout = _.delay(() => {
-      this.stop();
-    }, noiseTime * 1000);
+    let timeout;
+    if (!loop) {
+      timeout = _.delay(() => {
+        this.stop();
+      }, duration * 1000);
+    }
 
     this.setState({
       playing: source,
       timeout: timeout,
     });
-
   }
 
   stop() {

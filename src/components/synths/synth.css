@@ -7,6 +7,7 @@
 
 .module {
   composes: flex;
+  flex-flow: row;
   position: relative;
   margin: 0;
   padding: 1em 0;
@@ -16,6 +17,8 @@
 
 .container {
   composes: flex;
+  flex: 1 0 0;
+  align-items: stretch;
   max-width: 800px;
   padding: 0 2em;
 }
