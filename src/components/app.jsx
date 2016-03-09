@@ -10,7 +10,6 @@ export default function App() {
     <html className={appCss.top}>
       <head>
         <title>Synth</title>
-        <link rel="stylesheet" type="text/css" href="/static/base.global.css" />
       </head>
       <body className={appCss.top}>
         <Lesson1 />

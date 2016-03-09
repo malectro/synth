@@ -9,7 +9,7 @@ export default function Lesson1() {
   return (
     <article className={lessonCss.article}>
       <section>
-        <h1>Sound and Fury</h1>
+        <h1 className={lessonCss.title}>Sound and Fury</h1>
 
         <blockquote>
           <dfn>noise</dfn> /noiz/ <em>noun</em>:

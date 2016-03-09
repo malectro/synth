@@ -3,14 +3,19 @@
   padding: 0;
 }
 
-.article h1 {
-  font-size: 36px;
+.title {
+  composes: title from 'src/styles/fonts.css';
 }
 
 .article section {
   max-width: 800px;
   margin: 0 auto;
   padding: 2em;
+}
+
+.article figcaption {
+  font-size: 15px;
+  font-style: italic;
 }
 
 .article dfn {
@@ -25,6 +30,5 @@
 }
 
 .article p {
-  font-family: serif;
 }
 
