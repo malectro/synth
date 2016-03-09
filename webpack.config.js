@@ -108,12 +108,19 @@ const client = {
       JSON_LOADER,
       {
         test: /\.css$/,
-        exclude: /node_modules/,
+        exclude: [
+          /node_modules/,
+          /\.global\.css$/,
+        ],
         loader: DEVELOPMENT ? `style-loader!css-loader${CSS_MODULES}` : ExtractTextPlugin.extract('style-loader', `css-loader${CSS_MODULES}`),
       },
       {
         test: /\.css$/,
         include: /node_modules/,
+        loader: DEVELOPMENT ? `style-loader!css-loader` : ExtractTextPlugin.extract('style-loader', `css-loader!postcss-loader?pack=css`),
+      },
+      {
+        test: /\.global\.css$/,
         loader: DEVELOPMENT ? `style-loader!css-loader` : ExtractTextPlugin.extract('style-loader', `css-loader!postcss-loader?pack=css`),
       },
     ],

@@ -5,6 +5,8 @@ import React, {PropTypes} from 'react';
 import PureComponent from 'react-pure-render/component';
 import audio, {SAMPLE_RATE} from 'src/audio';
 
+import css from './module.css';
+
 
 const noiseTime = 4;
 const count = SAMPLE_RATE * noiseTime;
@@ -36,18 +38,58 @@ export default class Module extends PureComponent {
 
   render() {
     return (
-      <figure>
+      <figure className={css.module}>
         <XYPlot points={this.state.points} />
-        <button onClick={this.play}>Play</button>
+        <button onClick={this.play}>
+          { !this.state.playing ?
+            <svg viewBox="0 0 100 100">
+              <path d="M 0 0 L 100 50 L 0 100 z" />
+            </svg>
+          :
+            <svg viewBox="0 0 100 100">
+              <rect x="0" y="0" width="40" height="100" />
+              <rect x="60" y="0" width="40" height="100" />
+            </svg>
+          }
+        </button>
       </figure>
     );
   }
 
   play() {
+    if (!this.state.playing) {
+      this.start();
+    } else {
+      this.stop();
+    }
+  }
+
+  start() {
     const source = audio.createBufferSource();
     source.buffer = this.buffer;
     source.connect(audio.destination);
-    source.start(0);
+    source.start();
+
+    const timeout = _.delay(() => {
+      this.stop();
+    }, noiseTime * 1000);
+
+    this.setState({
+      playing: source,
+      timeout: timeout,
+    });
+
+  }
+
+  stop() {
+    const source = this.state.playing;
+    if (source) {
+      clearTimeout(this.state.timeout);
+      source.stop();
+      this.setState({
+        playing: null,
+      });
+    }
   }
 }
 
