@@ -20,6 +20,12 @@
   padding: 0 2em;
 }
 
+.player {
+  composes: flex;
+  position: relative;
+  width: 100%;
+}
+
 .module canvas {
   width: 100%;
   height: 200px;

@@ -1,8 +1,8 @@
 /* @flow */
 
 import _ from 'lodash';
-import React, {PropTypes} from 'react';
-import PureComponent from 'react-pure-render/component';
+import React, {PropTypes, Component} from 'react';
+import shouldPureComponentUpdate from 'react-pure-render/function';
 import audio, {SAMPLE_RATE} from 'src/audio';
 
 import css from './module.css';
@@ -10,7 +10,9 @@ import css from './module.css';
 
 const noiseTime = 4;
 const count = SAMPLE_RATE * noiseTime;
-export default class Module extends PureComponent {
+export default class Module extends Component {
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
   constructor(props) {
     super(props);
 
@@ -22,12 +24,44 @@ export default class Module extends PureComponent {
     this.state = {
       points,
     };
+  }
+
+  render() {
+    const {points} = this.state;
+    return (
+      <figure className={css.module}>
+        <div className={css.container}>
+          <SoundPlayer points={points} />
+          <figcaption>Because this noise was generated randomly by your computer, we can safely assume it's never been seen before in the history of humanity.</figcaption>
+        </div>
+      </figure>
+    );
+  }
+}
+
+
+class SoundPlayer extends Component {
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
+  props: {
+    points: Array<{
+      x: number,
+      y: number,
+    }>,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      playing: null,
+    };
 
     this.play = this.play.bind(this);
   }
 
   componentDidMount() {
-    const {points} = this.state;
+    const {points} = this.props;
     const buffer = audio.createBuffer(1, points.length, SAMPLE_RATE);
     const data = buffer.getChannelData(0);
 
@@ -39,26 +73,22 @@ export default class Module extends PureComponent {
   }
 
   render() {
-    const {points} = this.state;
     return (
-      <figure className={css.module}>
-        <div className={css.container}>
-          <XYPlot points={points} />
-          <button onClick={this.play}>
-            { !this.state.playing ?
-              <svg viewBox="0 0 100 100">
-                <path d="M 0 0 L 100 50 L 0 100 z" />
-              </svg>
-            :
-              <svg viewBox="0 0 100 100">
-                <rect x="0" y="0" width="40" height="100" />
-                <rect x="60" y="0" width="40" height="100" />
-              </svg>
-            }
-          </button>
-          <figcaption>Because this noise was generated randomly by your computer, we can safely assume it's never been seen before in the history of humanity.</figcaption>
-        </div>
-      </figure>
+      <div className={css.player}>
+        <XYPlot points={this.props.points} />
+        <button onClick={this.play}>
+          { !this.state.playing ?
+            <svg viewBox="0 0 100 100">
+              <path d="M 0 0 L 100 50 L 0 100 z" />
+            </svg>
+          :
+            <svg viewBox="0 0 100 100">
+              <rect x="0" y="0" width="40" height="100" />
+              <rect x="60" y="0" width="40" height="100" />
+            </svg>
+          }
+        </button>
+      </div>
     );
   }
 
@@ -101,7 +131,7 @@ export default class Module extends PureComponent {
 
 
 const limit = 200;
-class XYPlot extends PureComponent {
+class XYPlot extends Component {
   props: {
     points: Array<{
       x: number,
@@ -132,6 +162,8 @@ class XYPlot extends PureComponent {
     };
   }
 
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.resize(this.props);
@@ -150,7 +182,6 @@ class XYPlot extends PureComponent {
 
   render() {
     const {width, height} = this.state.size;
-    console.log('rendering', this.state.size);
     return (
       <canvas ref={el => this.el = el} width={width} height={height} />
     );
@@ -167,7 +198,6 @@ class XYPlot extends PureComponent {
   }
 
   draw() {
-    console.log('drawing');
     const {ctx, props, state} = this;
     const {width, height} = state.size;
     const points = props.points.slice(0, limit);
