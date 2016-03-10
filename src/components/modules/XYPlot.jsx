@@ -4,13 +4,14 @@ import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
 
-const limit = 200;
 export default class XYPlot extends Component {
   props: {
     points: Array<{
       x: number,
       y: number,
     }>,
+    limit: number,
+    repeatAt: number,
     size: {
       width: number | 'auto',
       height: number | 'auto',
@@ -22,6 +23,8 @@ export default class XYPlot extends Component {
       width: 'auto',
       height: 'auto',
     },
+    limit: 200,
+    repeatAt: 200,
   };
 
   constructor(props) {
@@ -74,17 +77,32 @@ export default class XYPlot extends Component {
   draw() {
     const {ctx, props, state} = this;
     const {width, height} = state.size;
-    const points = props.points.slice(0, limit);
+    const {repeatAt, limit} = props;
+    const length = Math.min(repeatAt, limit);
+    const points = props.points.slice(0, length);
     const halfHeight = height / 2;
     const margin = 2;
-    const stepSize = (width / points.length);
+    const stepSize = (width / limit);
 
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = 'gray';
+
+    for (let i = 0, j = 0; i < limit; i++, j++) {
+      if (j >= length) {
+        j = 0;
+      }
+
+      const {x, y} = points[j];
+      const pos = i * stepSize;
+      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+    }
+
+    /*
     points.forEach(({x, y}) => {
       const pos = x * stepSize;
       this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
     });
+    */
   }
 }
 

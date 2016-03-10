@@ -49,7 +49,7 @@ export default class SoundPlayer extends Component {
   render() {
     return (
       <div className={css.player}>
-        <XYPlot points={this.props.points} />
+        <XYPlot points={this.props.points} repeatAt={100} />
         <button onClick={this.play}>
           { !this.state.playing ?
             <svg viewBox="0 0 100 100">
@@ -57,8 +57,7 @@ export default class SoundPlayer extends Component {
             </svg>
           :
             <svg viewBox="0 0 100 100">
-              <rect x="0" y="0" width="40" height="100" />
-              <rect x="60" y="0" width="40" height="100" />
+              <rect x="0" y="0" width="100" height="100" />
             </svg>
           }
         </button>
