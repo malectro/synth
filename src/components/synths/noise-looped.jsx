@@ -34,7 +34,7 @@ export default class Module extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <SoundPlayer points={points} duration={noiseTime} />
+          <SoundPlayer points={points} duration={noiseTime} repeatPlotAt={100} />
           <figcaption>Incidentally, this noise is probably also unique.</figcaption>
         </div>
       </figure>
