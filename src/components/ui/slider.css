@@ -1,0 +1,25 @@
+.flex {
+  display: flex;
+}
+
+.slider {
+  display: flex;
+  height: 20px;
+  align-items: stretch;
+  background: gray;
+}
+
+.progress {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  min-width: 20px;
+  background: white;
+}
+
+.handle {
+  width: 20px;
+  background: blue;
+  cursor: move;
+}
+
