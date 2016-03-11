@@ -1,5 +1,6 @@
 /* @flow */
 
+import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
@@ -34,18 +35,18 @@ export default class SoundPlayer extends Component {
     };
 
     this.play = this.play.bind(this);
+    this.adjust = _.debounce(this.adjust.bind(this), 200);
   }
 
   componentDidMount() {
-    const {points} = this.props;
-    const buffer = audio.createBuffer(1, points.length, SAMPLE_RATE);
-    const data = buffer.getChannelData(0);
+    this.createBuffer(this.props.points);
+  }
 
-    points.forEach(({x, y}, i) => {
-      data[i] = y;
-    });
-
-    this.buffer = buffer;
+  componentWillReceiveProps(newProps) {
+    const {points} = newProps;
+    if (this.props.points !== points) {
+      this.adjust(points);
+    }
   }
 
   render() {
@@ -65,6 +66,25 @@ export default class SoundPlayer extends Component {
         </button>
       </div>
     );
+  }
+
+  adjust(points) {
+    this.createBuffer(points);
+    if (this.state.playing) {
+      this.stop();
+      this.start();
+    }
+  }
+
+  createBuffer(points) {
+    const buffer = audio.createBuffer(1, points.length, SAMPLE_RATE);
+    const data = buffer.getChannelData(0);
+
+    points.forEach(({x, y}, i) => {
+      data[i] = y;
+    });
+
+    this.buffer = buffer;
   }
 
   play() {

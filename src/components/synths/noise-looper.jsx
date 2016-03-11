@@ -38,7 +38,7 @@ export default class Module extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <SoundPlayer points={points} duration={noiseTime} repeatPlotAt={100} />
+          <SoundPlayer points={points} duration={noiseTime} loop={true} />
           <Slider max={maxCount} value={loopSize} onChange={this.handleLoopSizeChange} />
           <figcaption>Incidentally, this noise is probably also unique.</figcaption>
         </div>
