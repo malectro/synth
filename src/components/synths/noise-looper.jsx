@@ -13,6 +13,7 @@ import Slider from 'src/components/ui/slider.jsx';
 
 const noiseTime = 2;
 const maxCount = SAMPLE_RATE * noiseTime;
+const maxSlide = Math.floor(Math.sqrt(maxCount));
 export default class Module extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
@@ -26,7 +27,7 @@ export default class Module extends Component {
 
     this.state = {
       points: points,
-      loopSize: maxCount,
+      loopSize: maxSlide,
     };
 
     this.handleLoopSizeChange = this.handleLoopSizeChange.bind(this);
@@ -34,12 +35,14 @@ export default class Module extends Component {
 
   render() {
     const {loopSize} = this.state;
-    const points = this.state.points.slice(0, loopSize);
+    const slicePoint = Math.pow(loopSize, 2);
+    const points = this.state.points.slice(0, slicePoint);
+    console.log(loopSize, slicePoint);
     return (
       <figure className={css.module}>
         <div className={css.container}>
           <SoundPlayer points={points} duration={noiseTime} loop={true} />
-          <Slider max={maxCount} value={loopSize} onChange={this.handleLoopSizeChange} />
+          <Slider max={maxSlide} value={loopSize} onChange={this.handleLoopSizeChange} />
           <figcaption>Incidentally, this noise is probably also unique.</figcaption>
         </div>
       </figure>

@@ -54,7 +54,7 @@ export default class Slider extends Component {
 
   handleMouseMove(event) {
     const {max, min} = this.props;
-    const percent = (event.clientX - this.rect.left) / this.rect.width;
+    const percent = _.clamp((event.clientX - this.rect.left) / this.rect.width, 0, 1);
     const newValue = percent * (max - min) + min;
 
     this.props.onChange(newValue);

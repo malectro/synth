@@ -59,7 +59,7 @@
   fill: white;
 }
 
-.module:hover button {
+.player:hover button {
   opacity: 0.8;
 }
 

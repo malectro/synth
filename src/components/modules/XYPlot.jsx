@@ -78,7 +78,7 @@ export default class XYPlot extends Component {
     const {ctx, props, state} = this;
     const {width, height} = state.size;
     const {repeatAt, limit} = props;
-    const length = Math.min(repeatAt, limit);
+    const length = Math.min(repeatAt, limit, props.points.length);
     const points = props.points.slice(0, length);
     const halfHeight = height / 2;
     const margin = 2;
