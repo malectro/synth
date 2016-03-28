@@ -10,6 +10,7 @@ export default class XYPlot extends Component {
       x: number,
       y: number,
     }>,
+    scale: number,
     limit: number,
     repeatAt: number,
     size: {
@@ -23,6 +24,7 @@ export default class XYPlot extends Component {
       width: 'auto',
       height: 'auto',
     },
+    scale: 0.05,
     limit: 200,
     repeatAt: 200,
   };
@@ -44,7 +46,7 @@ export default class XYPlot extends Component {
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.resize(this.props);
-    this.draw();
+    this.drawScaled();
   }
 
   componentWillReceiveProps(props) {
@@ -54,7 +56,7 @@ export default class XYPlot extends Component {
   }
 
   componentDidUpdate() {
-    this.draw();
+    this.drawScaled();
   }
 
   render() {
@@ -79,30 +81,50 @@ export default class XYPlot extends Component {
     const {width, height} = state.size;
     const {repeatAt, limit} = props;
     const length = Math.min(repeatAt, limit, props.points.length);
-    const points = props.points.slice(0, length);
+    const points = props.points;
+    const halfHeight = height / 2;
+    const margin = 2;
+    const stepSize = (width / points.length);
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = `rgba(150, 150, 150, 0.1)`;
+
+    for (let i = 0, j = 0; i < points.length; i++, j++) {
+      const {x, y} = points[j];
+      const pos = i * stepSize;
+      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+    }
+  }
+
+  drawScaled() {
+    const {ctx, props, state} = this;
+    const {width, height} = state.size;
+    const {points, scale, repeatAt, limit} = props;
+    const count = 200;
     const halfHeight = height / 2;
     const margin = 2;
     const stepSize = (width / limit);
 
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'gray';
+    ctx.fillStyle = `rgb(150, 150, 150)`;
 
-    for (let i = 0, j = 0; i < limit; i++, j++) {
-      if (j >= length) {
-        j = 0;
+    if (points.length * scale > limit) {
+      for (let i = 0, j = 0; i < limit; i++, j++) {
+        const index = Math.floor(i * points.length * scale / limit);
+        const {x, y} = points[Math.floor(index / scale)];
+        const pos = i * stepSize;
+        this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
       }
-
-      const {x, y} = points[j];
-      const pos = i * stepSize;
-      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+    } else {
+      for (let i = 0, j = 0; i < limit; i++, j++) {
+        if (j >= points.length * scale) {
+          j = 0;
+        }
+        const {x, y} = points[Math.floor(j / scale)];
+        const pos = i * stepSize;
+        this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+      }
     }
-
-    /*
-    points.forEach(({x, y}) => {
-      const pos = x * stepSize;
-      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
-    });
-    */
   }
 }
 

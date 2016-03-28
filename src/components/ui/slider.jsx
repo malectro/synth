@@ -3,6 +3,7 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
+import classify from 'classify';
 
 import {absolutePosition} from 'src/services/utils';
 import css from './slider.css';
@@ -15,6 +16,7 @@ export default class Slider extends Component {
     value: number,
     max: number,
     min: number,
+    className: ?string,
     onChange: (value: number) => void,
   };
 
@@ -34,10 +36,10 @@ export default class Slider extends Component {
   }
 
   render() {
-    const {value, max, min} = this.props;
+    const {value, max, min, className} = this.props;
     const percent = (value - min) * 100 / (max - min);
     return (
-      <div className={css.slider} ref={el => this.el = el}>
+      <div className={classify(css.slider, className)} ref={el => this.el = el}>
         <div className={css.progress} style={{width: `${percent}%`}}>
           <div className={css.handle} onMouseDown={this.handleMouseDown}></div>
         </div>
