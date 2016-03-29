@@ -42,7 +42,7 @@ export default class Module extends Component {
         <div className={css.container}>
           <SoundPlayer points={points} duration={noiseTime} loop={true} />
           <Slider className={css.slider} max={maxSlide} value={loopSize} onChange={this.handleLoopSizeChange} />
-          <figcaption>Incidentally, this noise is probably also unique.</figcaption>
+          <figcaption>Slowly drag the blue slider to the left to shorten the loop.</figcaption>
         </div>
       </figure>
     );

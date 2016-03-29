@@ -41,6 +41,15 @@ export default function Lesson1() {
       </section>
 
       <NoiseLooper />
+
+      <section>
+        <p>Playing this one will “loop” it indefinitely, and the slider underneath it will allow you to control length of each cycle. Slowly drag it to the left and notice how the sound changes. The repetition will become more and more obvious until it becomes a tone.</p>
+
+        <p>I always have an “aha!” moment when I listen to this. The transition is smooth but sudden, and audibly tells us that tones and loops are essentially the same thing – a repeating pattern. With that in mind, remember that a song often has repeating melodies, choruses, and verses. Music is a bit of a russian doll.</p>
+
+        <p>In the next lesson I’ll cover basic patterns that influence tone.</p>
+      </section>
+
     </article>
   );
 }
