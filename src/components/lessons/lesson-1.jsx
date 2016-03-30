@@ -49,7 +49,6 @@ export default function Lesson1() {
 
         <p>In the next lesson I’ll cover basic patterns that influence tone.</p>
       </section>
-
     </article>
   );
 }
