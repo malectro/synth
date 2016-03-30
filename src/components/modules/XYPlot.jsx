@@ -46,7 +46,7 @@ export default class XYPlot extends Component {
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.resize(this.props);
-    this.drawScaled();
+    this.draw();
   }
 
   componentWillReceiveProps(props) {
@@ -56,7 +56,7 @@ export default class XYPlot extends Component {
   }
 
   componentDidUpdate() {
-    this.drawScaled();
+    this.draw();
   }
 
   render() {
@@ -79,26 +79,6 @@ export default class XYPlot extends Component {
   draw() {
     const {ctx, props, state} = this;
     const {width, height} = state.size;
-    const {repeatAt, limit} = props;
-    const length = Math.min(repeatAt, limit, props.points.length);
-    const points = props.points;
-    const halfHeight = height / 2;
-    const margin = 2;
-    const stepSize = (width / points.length);
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = `rgba(150, 150, 150, 0.1)`;
-
-    for (let i = 0, j = 0; i < points.length; i++, j++) {
-      const {x, y} = points[j];
-      const pos = i * stepSize;
-      this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
-    }
-  }
-
-  drawScaled() {
-    const {ctx, props, state} = this;
-    const {width, height} = state.size;
     const {points, scale, repeatAt, limit} = props;
     const count = 200;
     const halfHeight = height / 2;
@@ -109,22 +89,41 @@ export default class XYPlot extends Component {
     ctx.fillStyle = `rgb(150, 150, 150)`;
 
     if (points.length * scale > limit) {
-      for (let i = 0, j = 0; i < limit; i++, j++) {
-        const index = Math.floor(i * points.length * scale / limit);
-        const {x, y} = points[Math.floor(index / scale)];
+      const ratio = points.length / limit;
+      const blurRadius = Math.floor(ratio);
+      for (let i = 0; i < limit; i++) {
+        const index = Math.floor(i * ratio);
+        const avg = this.getBlur(index, blurRadius);
         const pos = i * stepSize;
-        this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+        this.ctx.fillRect(pos, halfHeight, stepSize - margin, avg * halfHeight);
       }
     } else {
+      const ratio = 1 / scale;
+      const radius = Math.floor(ratio);
       for (let i = 0, j = 0; i < limit; i++, j++) {
         if (j >= points.length * scale) {
           j = 0;
         }
-        const {x, y} = points[Math.floor(j / scale)];
+        const index = Math.floor(j * ratio);
+        const avg = this.getBlur(index, radius);
+        const {x, y} = points[index];
         const pos = i * stepSize;
-        this.ctx.fillRect(pos, halfHeight, stepSize - margin, y * halfHeight);
+        this.ctx.fillRect(pos, halfHeight, stepSize - margin, avg * halfHeight);
       }
     }
+  }
+
+  getBlur(index, radius) {
+    const {points} = this.props;
+    const min = Math.max(0, index - radius);
+    const max = Math.min(points.length, index + radius);
+    let total = 0;
+
+    for (let i = min; i < max; i++) {
+      total += points[i].y;
+    }
+
+    return total / (radius * 2 + 1);
   }
 }
 
