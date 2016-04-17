@@ -17,13 +17,13 @@ export default class SoundPlayer extends Component {
       x: number,
       y: number,
     }>,
-    repeatPlotAt: number,
+    xyProps: Object,
     duration: number,
     loop: boolean,
   };
 
   static defaultProps = {
-    repeatPlotAt: Infinity,
+    xyProps: {},
     loop: false,
   };
 
@@ -52,7 +52,7 @@ export default class SoundPlayer extends Component {
   render() {
     return (
       <div className={css.player}>
-        <XYPlot points={this.props.points} repeatAt={this.props.repeatPlotAt} />
+        <XYPlot points={this.props.points} {...this.props.xyProps} />
         <button onClick={this.play}>
           { !this.state.playing ?
             <svg viewBox="0 0 100 100">

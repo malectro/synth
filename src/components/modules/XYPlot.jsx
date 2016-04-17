@@ -6,10 +6,11 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 export default class XYPlot extends Component {
   props: {
-    points: Array<{
+    points: {
       x: number,
       y: number,
-    }>,
+    }[],
+    sample: 'average' | 'one',
     choose: 'peak' | 'one',
     scale: number,
     limit: number,
@@ -25,6 +26,7 @@ export default class XYPlot extends Component {
       width: 'auto',
       height: 'auto',
     },
+    sample: 'average',
     scale: 0.05,
     limit: 200,
     repeatAt: 200,
@@ -47,7 +49,7 @@ export default class XYPlot extends Component {
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
     this.resize(this.props);
-    this.drawBars();
+    this.draw();
   }
 
   componentWillReceiveProps(props) {
@@ -57,7 +59,7 @@ export default class XYPlot extends Component {
   }
 
   componentDidUpdate() {
-    this.drawBars();
+    this.draw();
   }
 
   render() {
@@ -80,52 +82,13 @@ export default class XYPlot extends Component {
   draw() {
     const {ctx, props, state} = this;
     const {width, height} = state.size;
-    const {points, scale, repeatAt, limit} = props;
-    const count = 200;
-    const halfHeight = height / 2;
-    const margin = 2;
-    const stepSize = (width / limit);
-
-    let peaks = [0, 0];
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = `rgb(150, 150, 150)`;
-
-    if (points.length * scale > limit) {
-      const ratio = points.length / limit;
-      const blurRadius = Math.floor(ratio);
-      for (let i = 0; i < limit; i++) {
-        const index = Math.floor(i * ratio);
-        const avg = this.getBlur(index, blurRadius);
-        const pos = i * stepSize;
-        this.ctx.fillRect(pos, halfHeight, stepSize - margin, avg * halfHeight);
-      }
-    } else {
-      const ratio = 1 / scale;
-      const radius = Math.floor(ratio);
-      for (let i = 0, j = 0; i < limit; i++, j++) {
-        if (j >= points.length * scale) {
-          j = 0;
-        }
-        const index = Math.floor(j * ratio);
-        const avg = this.getBlur(index, radius);
-        const {x, y} = points[index];
-        const pos = i * stepSize;
-        this.ctx.fillRect(pos, halfHeight, stepSize - margin, avg * halfHeight);
-      }
-    }
-  }
-
-  drawBars() {
-    const {ctx, props, state} = this;
-    const {width, height} = state.size;
     const {limit} = props;
 
     const halfHeight = height / 2;
     const margin = 2;
     const stepSize = (width / limit);
 
-    const {minPeaks, maxPeaks} = this.calcAverages();
+    const {minPeaks, maxPeaks} = this.samplePoints();
 
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = `rgb(150, 150, 150)`;
@@ -136,83 +99,52 @@ export default class XYPlot extends Component {
     }
   }
 
-  calcPeaks() {
+  samplePoints() {
     const maxPeaks = [];
     const minPeaks = [];
 
-    const {points, limit} = this.props;
+    const {points, limit, sample} = this.props;
     const ratio = points.length / limit;
     const span = Math.floor(ratio);
 
-    for (let i = 0; i < limit; i++) {
-      const index = Math.floor(i * ratio);
-      const spanLimit = Math.min(index + span, points.length);
-      minPeaks[i] = maxPeaks[i] = 0;
-      for (let j = index; j < spanLimit; j++) {
-        const value = points[j].y;
-        if (value > maxPeaks[i]) {
-          maxPeaks[i] = value;
-        }
-        if (value < minPeaks[i]) {
-          minPeaks[i] = value;
-        }
-      }
-    }
+    console.log('sample', sample);
 
-    return {
-      maxPeaks,
-      minPeaks,
-    };
-  }
-
-  calcAverages() {
-    const maxPeaks = [];
-    const minPeaks = [];
-
-    const {points, limit} = this.props;
-    const ratio = points.length / limit;
-    const span = Math.floor(ratio);
+    const sampler = sample === 'average' ? ::this.sampleAverage : ::this.sampleOne;
 
     for (let i = 0; i < limit; i++) {
       const index = Math.floor(i * ratio);
-      const spanLimit = Math.min(index + span, points.length);
-
-      let minCount = 0;
-      let maxCount = 0;
-      minPeaks[i] = maxPeaks[i] = 0;
-
-      for (let j = index; j < spanLimit; j++) {
-        const value = points[j].y;
-        if (value > 0) {
-          maxCount++;
-          maxPeaks[i] += value;
-        } else {
-          minCount++;
-          minPeaks[i] += value;
-        }
-      }
-
-      maxPeaks[i] = maxPeaks[i] / maxCount;
-      minPeaks[i] = minPeaks[i] / minCount;
+      sampler(i, index, span, minPeaks, maxPeaks);
     }
 
-    return {
-      maxPeaks,
-      minPeaks,
-    };
+    return {maxPeaks, minPeaks};
   }
 
-  getBlur(index, radius) {
+  sampleOne(i, index, span, minPeaks, maxPeaks) {
+    minPeaks[i] = Math.abs(this.props.points[index].y);
+    maxPeaks[i] = -minPeaks[i];
+  }
+
+  sampleAverage(i, index, span, minPeaks, maxPeaks) {
     const {points} = this.props;
-    const min = Math.max(0, index - radius);
-    const max = Math.min(points.length, index + radius);
-    let total = 0;
+    const spanLimit = Math.min(index + span, points.length);
 
-    for (let i = min; i < max; i++) {
-      total += points[i].y;
+    let minCount = 0;
+    let maxCount = 0;
+    minPeaks[i] = maxPeaks[i] = 0;
+
+    for (let j = index; j < spanLimit; j++) {
+      const value = points[j].y;
+      if (value > 0) {
+        maxCount++;
+        maxPeaks[i] += value;
+      } else {
+        minCount++;
+        minPeaks[i] += value;
+      }
     }
 
-    return total / (radius * 2 + 1);
+    maxPeaks[i] = maxPeaks[i] / maxCount;
+    minPeaks[i] = minPeaks[i] / minCount;
   }
 
   getPeaks(index, size, peaks) {
