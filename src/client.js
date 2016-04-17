@@ -7,6 +7,14 @@ import routes from './routes';
 import App from './components/app.jsx';
 
 
+/*
+window.process = {
+  env: {
+    NODE_ENV: 'development',
+  },
+};
+*/
+
 function init() {
   render((
     <Router routes={routes} history={browserHistory} />

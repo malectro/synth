@@ -118,21 +118,34 @@ export default class XYPlot extends Component {
     const ratio = points.length / limit;
     const span = Math.floor(ratio);
 
-    console.log('sample', sample);
-
     const sampler = sample === 'average' ? ::this.sampleAverage : ::this.sampleOne;
 
-    for (let i = 0; i < limit; i++) {
-      const index = Math.floor(i * ratio);
-      sampler(i, index, span, minPeaks, maxPeaks);
+    if (limit < points.length) {
+      for (let i = 0; i < limit; i++) {
+        const index = Math.floor(i * ratio);
+        sampler(i, index, span, minPeaks, maxPeaks);
+      }
+    } else {
+      for (let i = 0, j = 0; i < limit; i++, j++) {
+        if (j === points.length) {
+          j = 0;
+        }
+        this.sampleOne(i, j, 1, minPeaks, maxPeaks);
+      }
     }
 
     return {maxPeaks, minPeaks};
   }
 
   sampleOne(i, index, span, minPeaks, maxPeaks) {
-    minPeaks[i] = Math.abs(this.props.points[index].y);
-    maxPeaks[i] = -minPeaks[i];
+    const val = this.props.points[index].y;
+    if (val > 0) {
+      maxPeaks[i] = val;
+      minPeaks[i] = 0;
+    } else {
+      minPeaks[i] = val;
+      maxPeaks[i] = 0;
+    }
   }
 
   sampleAverage(i, index, span, minPeaks, maxPeaks) {
@@ -154,8 +167,12 @@ export default class XYPlot extends Component {
       }
     }
 
-    maxPeaks[i] = maxPeaks[i] / maxCount;
-    minPeaks[i] = minPeaks[i] / minCount;
+    if (maxCount) {
+      maxPeaks[i] = maxPeaks[i] / maxCount;
+    }
+    if (minCount) {
+      minPeaks[i] = minPeaks[i] / minCount;
+    }
   }
 
   getRange(points) {
