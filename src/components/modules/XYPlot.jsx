@@ -82,20 +82,31 @@ export default class XYPlot extends Component {
   draw() {
     const {ctx, props, state} = this;
     const {width, height} = state.size;
-    const {limit} = props;
+    const {limit, points} = props;
 
     const halfHeight = height / 2;
     const margin = 2;
     const stepSize = (width / limit);
 
     const {minPeaks, maxPeaks} = this.samplePoints();
+    const range = {
+      positive: this.getRange(maxPeaks),
+      negative: this.getRange(minPeaks),
+    };
+
+    const positiveScale = 1 / (range.positive.max - range.positive.min);
+    const negativeScale = 1 / (range.negative.max - range.negative.min);
 
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = `rgb(150, 150, 150)`;
 
     for (let i = 0; i < limit; i++) {
-      const diff = maxPeaks[i] - minPeaks[i];
-      ctx.fillRect(i * stepSize, minPeaks[i] * halfHeight + halfHeight, stepSize - margin, diff * halfHeight);
+      const maxPeak = (maxPeaks[i] - range.positive.min) * positiveScale;
+      const minPeak = (range.negative.max - minPeaks[i]) * -negativeScale;
+      const diff = maxPeak - minPeak;
+      ctx.fillRect(i * stepSize,
+                   minPeak * halfHeight + halfHeight,
+                   stepSize - margin, diff * halfHeight);
     }
   }
 
@@ -145,6 +156,25 @@ export default class XYPlot extends Component {
 
     maxPeaks[i] = maxPeaks[i] / maxCount;
     minPeaks[i] = minPeaks[i] / minCount;
+  }
+
+  getRange(points) {
+    let min = Infinity;
+    let max = -Infinity;
+
+    const limit = points.length;
+
+    for (let i = 0; i < limit; i++) {
+      const val = points[i];
+      if (val > max) {
+        max = val;
+      }
+      if (val < min) {
+        min = val;
+      }
+    }
+
+    return {max, min};
   }
 
   getPeaks(index, size, peaks) {
