@@ -16,11 +16,14 @@ export default function App({children}: Props) {
     <html className={appCss.top}>
       <head>
         <title>Synth</title>
+        { process.env.NODE_ENV !== 'development' &&
+          <link rel="stylesheet" type="text/css" href="static/main.css" />
+        }
       </head>
       <body className={appCss.top}>
         {children}
-        <script src="/static/vendor.js"></script>
-        <script src="/static/main.js"></script>
+        <script src="static/vendor.js"></script>
+        <script src="static/main.js"></script>
       </body>
     </html>
   );
