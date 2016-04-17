@@ -2,7 +2,10 @@ import path from 'path';
 import express from 'express';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
-import App from './components/app.jsx';
+import {match, RouterContext} from 'react-router';
+
+import routes from './routes';
+//import App from './components/app.jsx';
 
 /*
 import {createStore} from 'redux';
@@ -28,14 +31,28 @@ if (!HOT_MODULE_REPLACEMENT) {
 }
 
 
-app.get('/', (req, res) => {
-  const html = renderToString(
-    <App />
-  );
-  res.send(
+app.get('*', (req, res) => {
+  const location = req.url;
+  match({routes, location}, (error, redirect, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+
+    } else if (redirect) {
+      res.redirect(302, redirect.pathname + redirect.search);
+
+    } else if (renderProps) {
+      const html = renderToString(
+        <RouterContext {...renderProps} />
+      );
+      res.send(
 `<!DOCTYPE html>
 ${html}`
-  );
+      );
+    } else {
+      console.log('404', location);
+      res.status(404).send('Not found');
+    }
+  });
 });
 
 
