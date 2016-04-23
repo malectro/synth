@@ -1,23 +1,19 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, browserHistory, match} from 'react-router';
+import {Router, userRouterHistory, match} from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
 import routes from './routes';
 
 import App from './components/app.jsx';
 
 
-/*
-window.process = {
-  env: {
-    NODE_ENV: 'development',
-  },
-};
-*/
+const appHistory = useScroll(useRouterHistory(createBrowserHistory))();
 
 function init() {
   render((
-    <Router routes={routes} history={browserHistory} />
+    <Router routes={routes} history={appHistory} />
   ), document);
 }
 
