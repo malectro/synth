@@ -4,28 +4,15 @@ import React from 'react';
 
 import './base.global.css';
 import appCss from './app.css';
-import Lesson1 from './lessons/lesson-1.jsx';
 
 
 type Props = {
-  children: Object[],
+  children: Object,
 };
 
 export default function App({children}: Props) {
-  return (
-    <html className={appCss.top}>
-      <head>
-        <title>Synth</title>
-        { process.env.NODE_ENV !== 'development' &&
-          <link rel="stylesheet" type="text/css" href="static/main.css" />
-        }
-      </head>
-      <body className={appCss.top}>
-        {children}
-        <script src="static/vendor.js"></script>
-        <script src="static/main.js"></script>
-      </body>
-    </html>
-  );
+  return <div className={appCss.top}>
+    {children}
+  </div>;
 }
 

@@ -3,16 +3,9 @@ import express from 'express';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {match, RouterContext} from 'react-router';
+import serialize from 'serialize-javascript';
 
 import routes from './routes';
-//import App from './components/app.jsx';
-
-/*
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import counterApp from './reducers';
-import App from './containers/App';
-*/
 
 
 const DEVELOPMENT = process.env.NODE_ENV === 'development';
@@ -23,6 +16,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.set('port', PORT);
+
+app.set('views', 'src/views');
+app.set('view engine', 'pug');
 
 app.use('/images', express.static(__dirname + '/images'));
 
@@ -41,13 +37,16 @@ app.get('*', (req, res) => {
       res.redirect(302, redirect.pathname + redirect.search);
 
     } else if (renderProps) {
-      const html = renderToString(
+      const content = renderToString(
         <RouterContext {...renderProps} />
       );
-      res.send(
-`<!DOCTYPE html>
-${html}`
-      );
+      const data = serialize({});
+      res.render('index', {
+        content,
+        data,
+        development: DEVELOPMENT,
+        base: HOT_MODULE_REPLACEMENT ? 'http://localhost:8080' : '',
+      });
     } else {
       console.log('404', location);
       res.status(404).send('Not found');

@@ -1,13 +1,4 @@
 .top {
-  /* Page Margins Reset */
-  margin: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-
-  /* base look */
-  background: white;
-
   /* Font and Text Styles */
   composes: text from 'src/styles/fonts.css';
   color: rgba(0, 0, 0, 0.8);

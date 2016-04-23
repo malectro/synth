@@ -10,11 +10,12 @@ import App from './components/app.jsx';
 
 
 const appHistory = useScroll(useRouterHistory(createBrowserHistory))();
+const appElement = document.getElementById('app');
 
 function init() {
   render((
     <Router routes={routes} history={appHistory} />
-  ), document);
+  ), appElement);
 }
 
 match({routes, location}, () => {
