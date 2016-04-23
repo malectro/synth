@@ -1,6 +1,6 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, userRouterHistory, match} from 'react-router';
+import {Router, useRouterHistory, match} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
