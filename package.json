@@ -6,8 +6,11 @@
   "scripts": {
     "start": "node build/server/index.js",
     "start:dev": "NODE_ENV=development nodemon build/server/index.js",
+    "start:hot": "HMR=true npm run start:dev",
     "build": "webpack",
     "build:dev": "NODE_ENV=development webpack -w",
+    "build:hot": "HMR=true npm run build:dev",
+    "hot": "NODE_ENV=development node webpack-dev-server.js",
     "flow": "flow",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -37,6 +40,7 @@
     "null-loader": "^0.1.1",
     "postcss-import": "^8.0.2",
     "postcss-loader": "^0.8.1",
+    "pug": "^2.0.0-alpha6",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-pure-render": "^1.0.2",
@@ -45,6 +49,7 @@
     "rimraf": "^2.5.2",
     "scroll-behavior": "^0.4.0",
     "sculpt": "git@github.com:malectro/sculpt",
+    "serialize-javascript": "^1.2.0",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.13"
   },

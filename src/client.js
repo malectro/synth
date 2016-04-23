@@ -4,21 +4,36 @@ import {Router, useRouterHistory, match} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
-import routes from './routes';
-
-import App from './components/app.jsx';
+import routes from 'src/routes';
 
 
 const appHistory = useScroll(useRouterHistory(createBrowserHistory))();
 const appElement = document.getElementById('app');
+let currentRoutes = routes;
 
-function init() {
+function renderAll() {
   render((
-    <Router routes={routes} history={appHistory} />
+    <Router routes={currentRoutes} history={appHistory} />
   ), appElement);
 }
 
-match({routes, location}, () => {
-  init();
-});
+renderAll();
+
+if (module.hot) {
+  const ReactDOM = require('react-dom');
+
+  function renderAndCatch() {
+    try {
+      renderAll();
+    } catch (e) {
+      console.error('Hot Render', e.stack || e);
+    }
+  }
+
+  module.hot.accept('src/routes', () => {
+    currentRoutes = require('src/routes').default;
+    ReactDOM.unmountComponentAtNode(appElement);
+    renderAndCatch();
+  });
+}
 
