@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 import lessonCss from './lesson.css';
 
@@ -48,6 +49,8 @@ export default function Lesson1() {
         <p>I always have an “aha!” moment when I listen to this. The transition is smooth but sudden, and audibly tells us that tones and loops are essentially the same thing – a repeating pattern. With that in mind, remember that a song often has repeating melodies, choruses, and verses. Music is a bit of a russian doll.</p>
 
         <p>In the next lesson I’ll cover basic patterns that influence tone.</p>
+
+        <Link to="/2">Next</Link>
       </section>
     </article>
   );

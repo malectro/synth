@@ -33,7 +33,7 @@ export default class Module extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <SoundPlayer points={points} duration={noiseTime} />
+          <SoundPlayer points={points} duration={noiseTime} xyProps={{className: css.plot}} />
           <figcaption>Because this noise was generated randomly by your computer, we can safely assume it's never been seen before in the history of humanity.</figcaption>
         </div>
       </figure>

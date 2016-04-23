@@ -9,3 +9,7 @@ button {
   padding: 0;
 }
 
+div, figure, section, figcaption {
+  display: inherit;
+}
+

@@ -6,6 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 export default class XYPlot extends Component {
   props: {
+    className: ?string,
     points: {
       x: number,
       y: number,
@@ -65,7 +66,7 @@ export default class XYPlot extends Component {
   render() {
     const {width, height} = this.state.size;
     return (
-      <canvas ref={el => this.el = el} width={width} height={height} />
+      <canvas className={this.props.className} ref={el => this.el = el} width={width} height={height} />
     );
   }
 

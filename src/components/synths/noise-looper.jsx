@@ -40,7 +40,7 @@ export default class Module extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <SoundPlayer points={points} duration={noiseTime} loop={true} />
+          <SoundPlayer points={points} duration={noiseTime} loop={true} xyProps={{className: css.plot}} />
           <Slider className={css.slider} max={maxSlide} value={loopSize} onChange={this.handleLoopSizeChange} />
           <figcaption>Slowly drag the blue slider to the left to shorten the loop.</figcaption>
         </div>

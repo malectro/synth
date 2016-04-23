@@ -1,0 +1,27 @@
+.module {
+  composes: module from 'src/components/synths/synth.css';
+}
+
+.container {
+  composes: container from 'src/components/synths/synth.css';
+  flex-flow: column;
+}
+
+.row {
+  height: 200px;
+  margin: 0 -5px;
+}
+
+.quad {
+  flex: 1 0 0;
+  margin: 0 5px;
+  fill: white;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas {
+  width: 120px;
+  height: 120px;
+}
+
