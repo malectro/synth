@@ -24,6 +24,8 @@ export default class NoiseAndShapes extends Component {
               <circle cx="5" cy="5" r="3" />
             </svg>
           </div>
+
+          <figcaption>On top there are two pictures of noise that, despite being unique, appear the same. Below them are a circle and square, which are blatantly different.</figcaption>
         </div>
       </figure>
     );
