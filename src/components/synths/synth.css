@@ -26,7 +26,6 @@
 .player {
   composes: flex;
   position: relative;
-  width: 100%;
 }
 
 .plot {
@@ -67,8 +66,20 @@
   margin-top: 1em;
 }
 
+.row {
+  margin: 0 -20px;
+}
+
 .quad {
+  flex: 1 0 0;
   height: 200px;
+  /* not sure why this*/
+  width: 320px;
+  margin: 20px;
   align-self: stretch;
+}
+
+.quad .player {
+  flex: 1 0 0;
 }
 

@@ -3,7 +3,7 @@ import React from 'react';
 import lessonCss from './lesson.css';
 
 import NoiseAndShapes from  'src/components/lessons/lesson-2/noise-and-shapes.jsx';
-import SimpleWaveform from 'src/components/synths/simple-waveform.jsx';
+import SimpleWaveforms from 'src/components/synths/simple-waveforms.jsx';
 
 
 export default function Lesson2() {
@@ -21,7 +21,7 @@ export default function Lesson2() {
         <p>In computer graphics the pure, preschool shapes like circles and squares are called “primitives”. Audio has similar “shapes” it calls “common waveforms” that are often used as the building blocks of more complex sounds.</p>
       </section>
 
-      <SimpleWaveform />
+      <SimpleWaveforms />
     </article>
   );
 }

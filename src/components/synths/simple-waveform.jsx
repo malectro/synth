@@ -20,10 +20,6 @@ export default class SimpleWaveform extends Component {
     type: WaveType,
   };
 
-  componentDidMount() {
-    this.createSource();
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.type !== this.props.type) {
       this.player.refresh();
@@ -32,13 +28,9 @@ export default class SimpleWaveform extends Component {
 
   render() {
     return (
-      <figure className={css.module}>
-        <div className={css.container}>
-          <SoundPlayer duration={noiseTime} onGetSource={this.handleGetSource.bind(this)} loop={true} ref={el => this.player = el}>
-            <SimpleWaveformPlot type="square" />
-          </SoundPlayer>
-        </div>
-      </figure>
+      <SoundPlayer duration={noiseTime} onGetSource={this.handleGetSource.bind(this)} loop={true} ref={el => this.player = el}>
+        <SimpleWaveformPlot type={this.props.type} />
+      </SoundPlayer>
     );
   }
 
@@ -116,12 +108,15 @@ class SimpleWaveformPlot extends Component {
     const halfWidth = Math.round(width / 2);
 
     ctx.strokeStyle = 'white';
+    ctx.lineWidth = 2;
 
     ctx.clearRect(0, 0, width, height);
     ctx.beginPath();
+    ctx.moveTo(0, halfHeight);
 
-    this.drawSquare(ctx, 0, halfWidth, halfHeight);
-    this.drawSquare(ctx, halfWidth, halfWidth, halfHeight);
+    const drawer = waves[props.type];
+    drawer(ctx, 0, halfWidth, halfHeight);
+    drawer(ctx, halfWidth, halfWidth, halfHeight);
 
     ctx.stroke();
   }
@@ -129,7 +124,6 @@ class SimpleWaveformPlot extends Component {
   drawSquare(ctx, start, width, amp) {
     const halfWidth = Math.round(width / 2);
 
-    ctx.moveTo(start, amp);
     ctx.lineTo(start, 0);
     ctx.lineTo(start + halfWidth, 0);
     ctx.lineTo(start + halfWidth, amp * 2);
@@ -137,4 +131,40 @@ class SimpleWaveformPlot extends Component {
     ctx.lineTo(start + width, amp);
   }
 }
+
+
+const waves = {
+  'square': (ctx, start, width, amp) => {
+    const halfWidth = Math.round(width / 2);
+
+    ctx.lineTo(start, 0);
+    ctx.lineTo(start + halfWidth, 0);
+    ctx.lineTo(start + halfWidth, amp * 2);
+    ctx.lineTo(start + width, amp * 2);
+    ctx.lineTo(start + width, amp);
+  },
+
+  'sine': (ctx, start, width, amp) => {
+    const unit = 2;
+
+    for (let x = 0; x < width; x += unit) {
+      let y = Math.sin(x * Math.PI * 2 / width) * amp + amp;
+      ctx.lineTo(start + x, y);
+    }
+  },
+
+  'triangle': (ctx, start, width, amp) => {
+    const quarterWidth = Math.round(width / 4);
+    ctx.lineTo(start + quarterWidth, 0);
+    ctx.lineTo(start + quarterWidth * 3, amp * 2);
+    ctx.lineTo(start + width, amp);
+  },
+
+  'sawtooth': (ctx, start, width, amp) => {
+    const halfWidth = Math.round(width / 2);
+    ctx.lineTo(start + halfWidth, 0);
+    ctx.lineTo(start + halfWidth, amp * 2);
+    ctx.lineTo(start + width, amp);
+  },
+};
 
