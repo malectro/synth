@@ -1,3 +1,6 @@
+export type WaveType = 'square' | 'triangle' | 'sine' | 'sawtooth';
+
+
 export const SAMPLE_RATE = 44100;
 
 let ctx;

@@ -6,21 +6,19 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import audio from 'src/audio';
 import css from 'src/components/synths/synth.css';
-import XYPlot from './XYPlot.jsx';
 
 
 export default class SoundPlayer extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   props: {
-    source: Object,
-    xyProps: Object,
+    onGetSource?: Function,
+    source?: Object,
     duration: number,
     loop: boolean,
   };
 
   static defaultProps = {
-    xyProps: {},
     loop: false,
   };
 
@@ -37,7 +35,7 @@ export default class SoundPlayer extends Component {
   render() {
     return (
       <div className={css.player}>
-        <XYPlot {...this.props.xyProps} />
+        {this.props.children}
         <button onClick={this.play}>
           { !this.state.playing ?
             <svg viewBox="0 0 100 100">
@@ -63,7 +61,7 @@ export default class SoundPlayer extends Component {
 
   start() {
     const {loop, duration} = this.props;
-    const source = this.props.onGetSource();
+    const source = this.props.source || this.props.onGetSource();
     source.connect(audio.destination);
     source.loop = loop;
     source.start();
@@ -92,8 +90,11 @@ export default class SoundPlayer extends Component {
     }
   }
 
-  playing() {
-    return this.state.playing;
+  refresh() {
+    if (this.state.playing) {
+      this.stop();
+      this.start();
+    }
   }
 }
 

@@ -7,6 +7,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import audio, {SAMPLE_RATE} from 'src/audio';
 
+import XYPlot from './XYPlot.jsx';
 import SourcePlayer from 'src/components/modules/player.jsx';
 
 
@@ -48,18 +49,16 @@ export default class BufferSoundPlayer extends Component {
   render() {
     const {points, xyProps, ...playerProps} = this.props;
     // NOTE (kyle): making a new xyProps object will break pure rendering
-    playerProps.xyProps = assign(xyProps, {points});
     return (
-      <SourcePlayer {...playerProps} onGetSource={this.handleGetSource.bind(this)} ref={el => this.player = el} />
+      <SourcePlayer {...playerProps} onGetSource={this.handleGetSource.bind(this)} ref={el => this.player = el}>
+        <XYPlot {...xyProps} points={points} />
+      </SourcePlayer>
     );
   }
 
   adjust(points) {
     this.createBuffer(points);
-    if (this.player.playing()) {
-      this.player.stop();
-      this.player.start();
-    }
+    this.player.refresh();
   }
 
   createBuffer(points) {

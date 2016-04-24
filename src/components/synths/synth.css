@@ -67,3 +67,8 @@
   margin-top: 1em;
 }
 
+.quad {
+  height: 200px;
+  align-self: stretch;
+}
+
