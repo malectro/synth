@@ -4,7 +4,7 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
+import audio from 'src/audio';
 import css from 'src/components/synths/synth.css';
 import XYPlot from './XYPlot.jsx';
 
@@ -13,10 +13,7 @@ export default class SoundPlayer extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   props: {
-    points: Array<{
-      x: number,
-      y: number,
-    }>,
+    source: Object,
     xyProps: Object,
     duration: number,
     loop: boolean,
@@ -35,24 +32,12 @@ export default class SoundPlayer extends Component {
     };
 
     this.play = this.play.bind(this);
-    this.adjust = _.debounce(this.adjust.bind(this), 200);
-  }
-
-  componentDidMount() {
-    this.createBuffer(this.props.points);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const {points} = newProps;
-    if (this.props.points !== points) {
-      this.adjust(points);
-    }
   }
 
   render() {
     return (
       <div className={css.player}>
-        <XYPlot points={this.props.points} {...this.props.xyProps} />
+        <XYPlot {...this.props.xyProps} />
         <button onClick={this.play}>
           { !this.state.playing ?
             <svg viewBox="0 0 100 100">
@@ -68,25 +53,6 @@ export default class SoundPlayer extends Component {
     );
   }
 
-  adjust(points) {
-    this.createBuffer(points);
-    if (this.state.playing) {
-      this.stop();
-      this.start();
-    }
-  }
-
-  createBuffer(points) {
-    const buffer = audio.createBuffer(1, points.length, SAMPLE_RATE);
-    const data = buffer.getChannelData(0);
-
-    points.forEach(({x, y}, i) => {
-      data[i] = y;
-    });
-
-    this.buffer = buffer;
-  }
-
   play() {
     if (!this.state.playing) {
       this.start();
@@ -97,8 +63,7 @@ export default class SoundPlayer extends Component {
 
   start() {
     const {loop, duration} = this.props;
-    const source = audio.createBufferSource();
-    source.buffer = this.buffer;
+    const source = this.props.onGetSource();
     source.connect(audio.destination);
     source.loop = loop;
     source.start();
@@ -126,4 +91,9 @@ export default class SoundPlayer extends Component {
       });
     }
   }
+
+  playing() {
+    return this.state.playing;
+  }
 }
+

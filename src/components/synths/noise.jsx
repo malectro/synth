@@ -7,7 +7,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {SAMPLE_RATE} from 'src/audio';
 import css from './synth.css';
 
-import SoundPlayer from 'src/components/modules/player.jsx';
+import SoundPlayer from 'src/components/modules/buffer-player.jsx';
 
 
 const noiseTime = 4;

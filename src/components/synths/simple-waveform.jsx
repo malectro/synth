@@ -10,22 +10,21 @@ import css from './synth.css';
 import SoundPlayer from 'src/components/modules/buffer-player.jsx';
 
 
-const noiseTime = 2;
+const noiseTime = 4;
 const count = SAMPLE_RATE * noiseTime;
-export default class Module extends Component {
+export default class SimpleWaveform extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   constructor(props) {
     super(props);
 
-    const halfCount = Math.floor(count / 2);
-    const points = _.times(halfCount, i => ({
+    const points = _.times(count, i => ({
       x: i,
       y: Math.random() * 2 - 1,
     }));
 
     this.state = {
-      points: points.concat(points),
+      points,
     };
   }
 
@@ -34,8 +33,7 @@ export default class Module extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <SoundPlayer points={points} duration={noiseTime} repeatPlotAt={100} xyProps={{className: css.plot}} />
-          <figcaption>Incidentally, this noise is probably also unique.</figcaption>
+          <SoundPlayer points={points} duration={noiseTime} xyProps={{className: css.plot}} />
         </div>
       </figure>
     );
