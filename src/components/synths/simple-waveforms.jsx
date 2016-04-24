@@ -28,6 +28,7 @@ export default () => (
           <SimpleWaveform type ="sawtooth" />
         </div>
       </div>
+      <figcaption>From top-left to bottom-right: square wave, sine wave, triangle wave, and sawtooth wave</figcaption>
     </div>
   </figure>
 );
