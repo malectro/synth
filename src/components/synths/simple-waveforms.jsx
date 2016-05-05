@@ -10,7 +10,7 @@ import SimpleWaveform from 'src/components/synths/simple-waveform.jsx';
 
 
 export default () => (
-  <figure className={css.module}>
+  <figure className={css.simpleModule}>
     <div className={css.container}>
       <div className={css.row}>
         <div className={css.quad}>

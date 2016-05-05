@@ -18,6 +18,13 @@ export default class SimpleWaveform extends Component {
 
   props: {
     type: WaveType,
+    frequency: number,
+    plotRepeat: number,
+  };
+
+  static defaultProps = {
+    frequency: 300,
+    plotRepeat: 0.5,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -26,18 +33,24 @@ export default class SimpleWaveform extends Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.source) {
+      this.source.frequency.value = this.props.frequency;
+    }
+  }
+
   render() {
     return (
       <SoundPlayer duration={noiseTime} onGetSource={this.handleGetSource.bind(this)} loop={true} ref={el => this.player = el}>
-        <SimpleWaveformPlot type={this.props.type} />
+        <SimpleWaveformPlot type={this.props.type} repeat={this.props.plotRepeat} />
       </SoundPlayer>
     );
   }
 
   handleGetSource() {
-    const source = audio.createOscillator();
+    const source = this.source = audio.createOscillator();
     source.type = this.props.type;
-    source.frequency.value = 300;
+    source.frequency.value = this.props.frequency;
     return source;
   }
 }
@@ -48,6 +61,7 @@ class SimpleWaveformPlot extends Component {
 
   props: {
     type: WaveType,
+    repeat: number,
   };
 
   state: {
@@ -88,7 +102,7 @@ class SimpleWaveformPlot extends Component {
   render() {
     const {width, height} = this.state.size;
     return (
-      <canvas className={css.quad} ref={el => this.el = el} width={width} height={height} />
+      <canvas className={css.wave} ref={el => this.el = el} width={width} height={height} />
     );
   }
 
@@ -103,9 +117,11 @@ class SimpleWaveformPlot extends Component {
 
   draw() {
     const {ctx, state, props} = this;
+    const {repeat} = props;
     const {width, height} = state.size;
     const halfHeight = Math.round(height / 2);
     const halfWidth = Math.round(width / 2);
+    const period = Math.round(repeat * width);
 
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 2;
@@ -115,8 +131,14 @@ class SimpleWaveformPlot extends Component {
     ctx.moveTo(0, halfHeight);
 
     const drawer = waves[props.type];
+
+    for (let x = 0; x < width; x += period) {
+      drawer(ctx, x, period, halfHeight);
+    }
+    /*
     drawer(ctx, 0, halfWidth, halfHeight);
     drawer(ctx, halfWidth, halfWidth, halfHeight);
+    */
 
     ctx.stroke();
   }

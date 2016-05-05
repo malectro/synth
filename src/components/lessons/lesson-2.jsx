@@ -4,6 +4,7 @@ import lessonCss from './lesson.css';
 
 import NoiseAndShapes from  'src/components/lessons/lesson-2/noise-and-shapes.jsx';
 import SimpleWaveforms from 'src/components/synths/simple-waveforms.jsx';
+import FrequencyWaveform from 'src/components/synths/frequency-waveform.jsx';
 
 
 export default function Lesson2() {
@@ -26,6 +27,8 @@ export default function Lesson2() {
       <section>
         <p>The module above will allow you to play any of the four basic waveforms. Of the four, the sine wave is the most organic – it sounds a lot like an organ or a flute. The square wave, being kindof pixelated, sounds a bit like a Game Boy, and the saw wave is frequently described as “fat”.</p>
       </section>
+
+      <FrequencyWaveform />
     </article>
   );
 }

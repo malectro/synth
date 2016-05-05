@@ -20,7 +20,7 @@ button {
   padding: 0;
 }
 
-div, figure, section, figcaption {
+div, figure, section, figcaption, canvas {
   display: inherit;
 }
 
