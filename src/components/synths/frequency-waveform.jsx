@@ -13,6 +13,9 @@ import SimpleWaveform from 'src/components/synths/simple-waveform.jsx';
 import Slider from 'src/components/ui/slider.jsx';
 
 
+const max = 1000;
+const min = 10;
+
 export default class Module extends Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
@@ -33,28 +36,27 @@ export default class Module extends Component {
   }
 
   render() {
-    const max = 1000;
     const {frequency} = this.state;
-    const repeat = frequency / max;
+    const repeat = 1 - (frequency - min) / (max - min);
 
     return (
       <figure className={css.freqModule}>
         <div className={css.container}>
           <SimpleWaveform type="sine" plotRepeat={repeat} frequency={frequency} />
           <div className={css.tics}>
-            <div className={css.highA}>A4 440hz</div>
-            <div className={css.lowA}>A3 220hz</div>
+            <div className={css.tic} style={{right: `${(440 - min) * 100 / (max - min)}%`}}>A4 440hz</div>
+            <div className={css.tic} style={{right: `${(220 - min) * 100 / (max - min)}%`}}>A3 220hz</div>
           </div>
-          <Slider className={css.slider} value={frequency} max={max} min={0} onChange={this.handleChange} />
+          <Slider className={css.slider} value={repeat} max={1} min={0} onChange={this.handleChange} />
           <figcaption>Try dragging between A3 and A4 to hear how similar the tones are.</figcaption>
         </div>
       </figure>
     );
   }
 
-  handleChange(frequency) {
+  handleChange(value) {
     this.setState({
-      frequency,
+      frequency: (1 - value) * (max - min) + min,
     });
   }
 }
