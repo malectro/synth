@@ -16,6 +16,7 @@
 }
 
 .container {
+  position: relative;
   composes: flex;
   flex: 1 0 0;
   align-items: stretch;
@@ -100,5 +101,24 @@
 
 .freqModule canvas {
   margin: 1em 0;
+}
+
+.tics {
+  position: absolute;
+  width: calc(100% - 4em);
+}
+.tic {
+  position: absolute;
+  border-left: 1px solid white;
+  padding-left: 0.3em;
+  font-size: 16px;
+}
+.highA {
+  composes: tic;
+  left: 44%;
+}
+.lowA {
+  composes: tic;
+  left: 22%;
 }
 

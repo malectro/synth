@@ -29,6 +29,12 @@ export default function Lesson2() {
       </section>
 
       <FrequencyWaveform />
+
+      <section>
+        <p>And by changing the speed (or frequency) at which we play these waves, we change the audible pitch. Musicians call pitches by letter names that correspond to keys on a piano, and incidentally there is a mathematical reason for why these letters repeat. As you climb a piano, each C note is double the frequency of the previous.</p>
+        <p>To really understand why these waves sound the way they do, it helps to look at a “frequency spectrum”.</p>
+      </section>
+
     </article>
   );
 }

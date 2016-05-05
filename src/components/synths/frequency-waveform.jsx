@@ -26,7 +26,7 @@ export default class Module extends Component {
 
     this.state = {
       type: 'sine',
-      frequency: 300,
+      frequency: 220,
     };
 
     (this: any).handleChange = this.handleChange.bind(this);
@@ -41,7 +41,12 @@ export default class Module extends Component {
       <figure className={css.freqModule}>
         <div className={css.container}>
           <SimpleWaveform type="sine" plotRepeat={repeat} frequency={frequency} />
+          <div className={css.tics}>
+            <div className={css.highA}>A4 440hz</div>
+            <div className={css.lowA}>A3 220hz</div>
+          </div>
           <Slider className={css.slider} value={frequency} max={max} min={0} onChange={this.handleChange} />
+          <figcaption>Try dragging between A3 and A4 to hear how similar the tones are.</figcaption>
         </div>
       </figure>
     );
