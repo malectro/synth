@@ -44,6 +44,7 @@ export default class Module extends Component {
         <div className={css.container}>
           <SimpleWaveform type="sine" plotRepeat={repeat} frequency={frequency} />
           <div className={css.tics}>
+            <div className={css.tic} style={{right: `${(880 - min) * 100 / (max - min)}%`}}>A5 880hz</div>
             <div className={css.tic} style={{right: `${(440 - min) * 100 / (max - min)}%`}}>A4 440hz</div>
             <div className={css.tic} style={{right: `${(220 - min) * 100 / (max - min)}%`}}>A3 220hz</div>
           </div>
