@@ -114,3 +114,11 @@
   font-size: 16px;
 }
 
+
+.analyzerModule {
+  composes: module;
+}
+.analyzerModule canvas {
+  height: 300px;
+}
+

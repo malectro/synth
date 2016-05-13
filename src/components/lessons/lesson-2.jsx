@@ -5,6 +5,7 @@ import lessonCss from './lesson.css';
 import NoiseAndShapes from  'src/components/lessons/lesson-2/noise-and-shapes.jsx';
 import SimpleWaveforms from 'src/components/synths/simple-waveforms.jsx';
 import FrequencyWaveform from 'src/components/synths/frequency-waveform.jsx';
+import Analyser from 'src/components/synths/analyser.jsx'
 
 
 export default function Lesson2() {
@@ -35,6 +36,7 @@ export default function Lesson2() {
         <p>To really understand why these waves sound the way they do, it helps to look at a “frequency spectrum”.</p>
       </section>
 
+      <Analyser />
     </article>
   );
 }
