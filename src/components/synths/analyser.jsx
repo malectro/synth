@@ -57,6 +57,7 @@ export default class Module extends Component {
         <div className={css.container}>
           <Spectrum className={css.spectrum} source={this.state.gain} />
           <Keyboard onPress={this.handleKeyPress} onRelease={this.handleKeyRelease} />
+          <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>
         </div>
       </figure>
     );

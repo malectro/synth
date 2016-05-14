@@ -26,8 +26,6 @@ export default class Module extends Component {
     this.buffer = new Float32Array(this.bufferLength);
 
     this.animationFrame = requestAnimationFrame(this.draw);
-
-    this.draw();
   }
 
   componentDidUpdate(prevProps) {
@@ -38,10 +36,14 @@ export default class Module extends Component {
   }
 
   componentWillUnmount() {
-    cancelAnimationFrame(this.animationFrame);
+    this.unmounted = true;
   }
 
   draw() {
+    if (this.unmounted) {
+      return;
+    }
+
     this.animationFrame = requestAnimationFrame(this.draw);
 
     const {ctx} = this.canvas;

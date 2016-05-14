@@ -37,6 +37,11 @@ export default function Lesson2() {
       </section>
 
       <Analyser />
+
+      <section>
+        <p>While we can play each waveform at a certain frequency, the story is actually much more complicated than that. Try playing a sine wave at different pitches, and, just as you’d expect, you’ll notice a very sharp spike in volume at that exact frequency.</p>
+        <p>But switch to a square wave, and you’ll see that a bit more is going on. The loudest spike, called the “fundamental frequency” is still at the frequency that you played, but there are a few smaller spikes at higher pitches as well. We call these frequencies “overtones”. While the fundamental frequency gives a note its pitch, the overtones give it its character. (Musicians, taking a queue from creative writers, often substitute “character” for “timbre”, “color”, or “shape”; but they essentially mean the same thing.)</p>
+      </section>
     </article>
   );
 }
