@@ -5,7 +5,6 @@ import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import audio, {SAMPLE_RATE} from 'src/audio';
-import css from './synth.css';
 
 
 export default class Module extends Component {
@@ -15,40 +14,59 @@ export default class Module extends Component {
     super(props);
 
     this.handleResize = this.handleResize.bind(this);
+    this.draw = this.draw.bind(this);
   }
 
   componentDidMount() {
     this.analyser = audio.createAnalyser();
-    this.analyser.fftSize = 2048;
+    this.analyser.fftSize = 1024;
+    this.analyser.maxDecibels = -10;
 
     this.bufferLength = this.analyser.frequencyBinCount;
     this.buffer = new Float32Array(this.bufferLength);
 
-    const source = this.source = audio.createOscillator();
-    source.type = 'sine';
-    source.frequency.value = 300;
-    source.connect(this.analyser);
-    source.start();
+    this.animationFrame = requestAnimationFrame(this.draw);
+
     this.draw();
   }
 
+  componentDidUpdate(prevProps) {
+    const {source} = this.props;
+    if (source && source !== prevProps.source) {
+      source.connect(this.analyser);
+    }
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.animationFrame);
+  }
+
   draw() {
+    this.animationFrame = requestAnimationFrame(this.draw);
+
     const {ctx} = this.canvas;
     const {width, height} = this.canvas.el;
 
     this.analyser.getFloatFrequencyData(this.buffer);
 
-    console.log(this.buffer);
-
     ctx.clearRect(0, 0, width, height);
 
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(0, 0, 100, 100);
+    ctx.fillStyle = 'white';
+
+    const scalar = 1 / (this.analyser.maxDecibels - this.analyser.minDecibels);
+    const margin = 2;
+    const length = Math.floor(this.buffer.length / 4);
+    const stepWidth = width / length;
+    for (let i = 0; i < length; i++) {
+      const size = (this.buffer[i] - this.analyser.minDecibels) * scalar * height;
+      ctx.fillRect(stepWidth * i, height - size, stepWidth - margin, size);
+    }
   }
 
   render() {
+    const {source, ...props} = this.props;
     return (
-      <Canvas ref={canvas => this.canvas = canvas} onResize={this.handleResize} />
+      <Canvas {...props} ref={canvas => this.canvas = canvas} onResize={this.handleResize} />
     );
   }
 

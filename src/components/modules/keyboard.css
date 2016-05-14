@@ -1,0 +1,9 @@
+.keyboard {
+  height: 50px;
+}
+
+.key {
+  flex: 1 0 0;
+  border-right: 1px solid blue;
+}
+
