@@ -24,6 +24,7 @@ export default class Module extends Component {
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleKeyRelease = this.handleKeyRelease.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -57,6 +58,12 @@ export default class Module extends Component {
         <div className={css.container}>
           <Spectrum className={css.spectrum} source={this.state.gain} />
           <Keyboard onPress={this.handleKeyPress} onRelease={this.handleKeyRelease} />
+          <select onChange={this.handleTypeChange} defaultValue="sine">
+            <option value="sine">Sine</option>
+            <option value="triangle">Triangle</option>
+            <option value="sawtooth">Sawtooth</option>
+            <option value="square">Square</option>
+          </select>
           <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>
         </div>
       </figure>
@@ -72,6 +79,10 @@ export default class Module extends Component {
   handleKeyRelease(freq) {
     const now = audio.currentTime;
     this.state.gain.gain.linearRampToValueAtTime(0, now + 0.2);
+  }
+
+  handleTypeChange(event) {
+    this.state.osc.type = event.target.value;
   }
 }
 
