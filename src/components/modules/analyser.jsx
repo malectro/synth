@@ -19,13 +19,11 @@ export default class Module extends Component {
 
   componentDidMount() {
     this.analyser = audio.createAnalyser();
-    this.analyser.fftSize = 2048 * 2;
+    this.analyser.fftSize = 2048;
     this.analyser.maxDecibels = -10;
 
     this.bufferLength = this.analyser.frequencyBinCount;
     this.buffer = new Float32Array(this.bufferLength);
-
-    console.log(this.bufferLength);
 
     this.animationFrame = requestAnimationFrame(this.draw);
   }
@@ -59,7 +57,7 @@ export default class Module extends Component {
 
     const scalar = 1 / (this.analyser.maxDecibels - this.analyser.minDecibels);
     const margin = 2;
-    const length = this.buffer.length;
+    const length = this.bufferLength;
     const stepWidth = width / length;
     for (let i = 0; i < length; i++) {
       const size = (this.buffer[i] - this.analyser.minDecibels) * scalar * height;

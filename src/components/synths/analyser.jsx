@@ -65,7 +65,7 @@ export default class Module extends Component {
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (
-              <WavePlot className={currentType === type ? css.waveSelected : css.wave} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
+              <WavePlot className={currentType === type ? css.waveSelected : css.wave} key={type} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
             )) }
           </div>
           <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>

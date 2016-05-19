@@ -40,18 +40,23 @@
 }
 
 .module button {
-  display: flex;
   position: absolute;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
-  justify-content: center;
-  align-items: center;
   background: black;
   opacity: 0;
-  transition: opacity 0.2s;
   cursor: pointer;
+  transition: opacity 0.2s;
+  -webkit-appearance: none;
+}
+.module button div {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .module button svg {

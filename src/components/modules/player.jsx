@@ -37,15 +37,17 @@ export default class SoundPlayer extends Component {
       <div className={css.player}>
         {this.props.children}
         <button onClick={this.play}>
-          { !this.state.playing ?
-            <svg viewBox="0 0 100 100">
-              <path d="M 0 0 L 100 50 L 0 100 z" />
-            </svg>
-          :
-            <svg viewBox="0 0 100 100">
-              <rect x="0" y="0" width="100" height="100" />
-            </svg>
-          }
+          <div>
+            { !this.state.playing ?
+              <svg viewBox="0 0 100 100">
+                <path d="M 0 0 L 100 50 L 0 100 z" />
+              </svg>
+            :
+              <svg viewBox="0 0 100 100">
+                <rect x="0" y="0" width="100" height="100" />
+              </svg>
+            }
+          </div>
         </button>
       </div>
     );

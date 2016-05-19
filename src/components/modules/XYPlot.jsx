@@ -5,6 +5,8 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 
 export default class XYPlot extends Component {
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
   props: {
     className: ?string,
     points: {
@@ -44,8 +46,6 @@ export default class XYPlot extends Component {
       },
     };
   }
-
-  shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
