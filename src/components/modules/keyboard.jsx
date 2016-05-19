@@ -18,7 +18,7 @@ const keys = _.range(88).map(index => (
 ));
 
 const Keyboard = ({onPress, onRelease, onMove}) => (
-  <div className={css.keyboard}>
+  <div className={css.keyboard} onMouseLeave={() => onRelease()}>
     { keys.map(freq => (
       <div className={css.key} key={freq} onMouseDown={() => onPress(freq)} onMouseOver={() => onMove(freq)} onMouseUp={() => onRelease(freq)}></div>
     )) }
