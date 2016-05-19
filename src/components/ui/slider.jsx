@@ -33,13 +33,17 @@ export default class Slider extends Component {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   render() {
     const {value, max, min, className} = this.props;
     const percent = (value - min) * 100 / (max - min);
     return (
-      <div className={classify(css.slider, className)} ref={el => this.el = el}>
+      <div className={classify(css.slider, className)} ref={el => this.el = el} onTouchStart={this.handleTouchStart}>
         <div className={css.progress} style={{width: `${percent}%`}}>
           <div className={css.handle} onMouseDown={this.handleMouseDown}></div>
         </div>
@@ -65,6 +69,27 @@ export default class Slider extends Component {
   handleMouseUp() {
     window.removeEventListener('mouseup', this.handleMouseUp);
     window.removeEventListener('mousemove', this.handleMouseMove);
+  }
+
+  handleTouchStart(event) {
+    window.addEventListener('touchmove', this.handleTouchMove);
+    window.addEventListener('touchend', this.handleTouchEnd);
+
+    this.rect = this.el.getBoundingClientRect();
+
+    const touch = event.touches[0];
+    this.handleMouseMove(touch);
+  }
+
+  handleTouchMove(event) {
+    event.preventDefault();
+    const touch = event.touches[0];
+    this.handleMouseMove(touch);
+  }
+
+  handleTouchEnd() {
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('touchend', this.handleTouchEnd);
   }
 }
 
