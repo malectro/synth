@@ -25,6 +25,7 @@ export default class Module extends Component {
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleKeyMove = this.handleKeyMove.bind(this);
     this.handleKeyRelease = this.handleKeyRelease.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
   }
@@ -61,7 +62,7 @@ export default class Module extends Component {
       <figure className={css.module}>
         <div className={css.container}>
           <Spectrum className={css.spectrum} source={this.state.gain} />
-          <Keyboard onPress={this.handleKeyPress} onRelease={this.handleKeyRelease} />
+          <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (
               <WavePlot className={currentType === type ? css.waveSelected : css.wave} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
@@ -77,6 +78,11 @@ export default class Module extends Component {
     const now = audio.currentTime;
     this.state.osc.frequency.linearRampToValueAtTime(freq, now + 0.01);
     this.state.gain.gain.linearRampToValueAtTime(0.8, now + 0.2);
+  }
+
+  handleKeyMove(freq) {
+    const now = audio.currentTime;
+    this.state.osc.frequency.linearRampToValueAtTime(freq, now + 0.01);
   }
 
   handleKeyRelease(freq) {
