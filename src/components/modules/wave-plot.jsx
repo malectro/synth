@@ -68,20 +68,27 @@ class SimpleWaveformPlot extends Component {
     const {ctx, state, props} = this;
     const {repeat} = props;
     const {width, height} = state.size;
-    const halfHeight = Math.round(height / 2);
-    const halfWidth = Math.round(width / 2);
-    const period = Math.round(repeat * width);
+    const lineWidth = 2;
+    const padding = Math.ceil(lineWidth / 2);
+
+    const drawWidth = width - padding * 2;
+    const drawHeight = height - padding * 2;
+    const halfHeight = Math.round(drawHeight / 2);
+    const halfWidth = Math.round(drawWidth / 2);
+    const period = Math.round(repeat * drawWidth);
 
     ctx.strokeStyle = 'white';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = lineWidth;
 
     ctx.clearRect(0, 0, width, height);
+
+    ctx.translate(padding, padding);
     ctx.beginPath();
     ctx.moveTo(0, halfHeight);
 
     const drawer = waves[props.type];
 
-    for (let x = 0; x < width; x += period) {
+    for (let x = 0; x < drawWidth; x += period) {
       drawer(ctx, x, period, halfHeight);
     }
     /*
@@ -90,16 +97,7 @@ class SimpleWaveformPlot extends Component {
     */
 
     ctx.stroke();
-  }
-
-  drawSquare(ctx, start, width, amp) {
-    const halfWidth = Math.round(width / 2);
-
-    ctx.lineTo(start, 0);
-    ctx.lineTo(start + halfWidth, 0);
-    ctx.lineTo(start + halfWidth, amp * 2);
-    ctx.lineTo(start + width, amp * 2);
-    ctx.lineTo(start + width, amp);
+    ctx.translate(-padding, -padding);
   }
 }
 
