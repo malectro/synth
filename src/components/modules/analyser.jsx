@@ -19,11 +19,13 @@ export default class Module extends Component {
 
   componentDidMount() {
     this.analyser = audio.createAnalyser();
-    this.analyser.fftSize = 1024;
+    this.analyser.fftSize = 2048 * 2;
     this.analyser.maxDecibels = -10;
 
     this.bufferLength = this.analyser.frequencyBinCount;
     this.buffer = new Float32Array(this.bufferLength);
+
+    console.log(this.bufferLength);
 
     this.animationFrame = requestAnimationFrame(this.draw);
   }
@@ -57,12 +59,29 @@ export default class Module extends Component {
 
     const scalar = 1 / (this.analyser.maxDecibels - this.analyser.minDecibels);
     const margin = 2;
-    const length = Math.floor(this.buffer.length / 4);
+    const length = this.buffer.length;
     const stepWidth = width / length;
     for (let i = 0; i < length; i++) {
       const size = (this.buffer[i] - this.analyser.minDecibels) * scalar * height;
       ctx.fillRect(stepWidth * i, height - size, stepWidth - margin, size);
     }
+
+    /*
+    const scalar = 1 / (this.analyser.maxDecibels - this.analyser.minDecibels);
+    const margin = 2;
+    const resolution = 1000;
+    const length = this.buffer.length;
+    const stepWidth = width / resolution;
+    for (let i = 0; i < resolution; i++) {
+      const sample = Math.floor(Math.pow(1.008, i));
+      //const sample = Math.floor(Math.log2(i));
+      if (sample > length) {
+        break;
+      }
+      const size = (this.buffer[sample] - this.analyser.minDecibels) * scalar * height;
+      ctx.fillRect(stepWidth * i, height - size, stepWidth - margin, size);
+    }
+    */
   }
 
   render() {

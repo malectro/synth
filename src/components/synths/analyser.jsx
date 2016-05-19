@@ -9,6 +9,7 @@ import css from './synth.css';
 
 import Spectrum from 'src/components/modules/analyser.jsx';
 import Keyboard from 'src/components/modules/keyboard.jsx';
+import WavePlot from 'src/components/modules/wave-plot.jsx';
 
 
 export default class Module extends Component {
@@ -20,6 +21,7 @@ export default class Module extends Component {
     this.state = {
       osc: null,
       gain: null,
+      waveType: 'sine',
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -30,6 +32,7 @@ export default class Module extends Component {
   componentDidMount() {
     const osc = audio.createOscillator();
     osc.frequency.value = 440;
+    osc.type = this.state.waveType;
 
     const gain = audio.createGain();
     gain.gain.value = 0;
@@ -53,17 +56,17 @@ export default class Module extends Component {
   }
 
   render() {
+    const currentType = this.state.osc && this.state.osc.type;
     return (
       <figure className={css.module}>
         <div className={css.container}>
           <Spectrum className={css.spectrum} source={this.state.gain} />
           <Keyboard onPress={this.handleKeyPress} onRelease={this.handleKeyRelease} />
-          <select onChange={this.handleTypeChange} defaultValue="sine">
-            <option value="sine">Sine</option>
-            <option value="triangle">Triangle</option>
-            <option value="sawtooth">Sawtooth</option>
-            <option value="square">Square</option>
-          </select>
+          <div className={css.waveSelect}>
+            { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (
+              <WavePlot className={currentType === type ? css.waveSelected : css.wave} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
+            )) }
+          </div>
           <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>
         </div>
       </figure>
@@ -81,8 +84,11 @@ export default class Module extends Component {
     this.state.gain.gain.linearRampToValueAtTime(0, now + 0.2);
   }
 
-  handleTypeChange(event) {
-    this.state.osc.type = event.target.value;
+  handleTypeChange(waveType) {
+    const {osc} = this.state;
+    osc.type = waveType;
+    console.log('changing', waveType);
+    this.setState({osc, waveType});
   }
 }
 

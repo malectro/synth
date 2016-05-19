@@ -127,3 +127,28 @@
   height: 300px;
 }
 
+.waveSelect {
+  margin: 1em 0;
+}
+.waveSelect .wave {
+  height: 60px;
+  flex: 1 0 0;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.waveSelect .wave {
+  opacity: 0.5;
+}
+.waveSelect .wave:hover {
+  opacity: 1;
+}
+.waveSelect .wave.selected {
+  opacity: 1;
+}
+.waveSelected {
+  composes: wave;
+}
+.waveSelect .waveSelected {
+  opacity: 1;
+}
+
