@@ -49,9 +49,7 @@ export default class XYPlot extends Component {
 
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
-    this.resize(this.props, () => {
-      this.draw();
-    });
+    this.resize(this.props);
   }
 
   componentWillReceiveProps(props) {

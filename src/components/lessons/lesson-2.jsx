@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 import lessonCss from './lesson.css';
 
@@ -12,7 +13,7 @@ export default function Lesson2() {
   return (
     <article className={lessonCss.article}>
       <section>
-        <h1 className={lessonCss.title}>Fundamentels</h1>
+        <h1 className={lessonCss.title}>Fundamentals</h1>
         <p>Even though all that noise was unique (in fact, refreshing lesson 1 will give you completely unique noise each time), it doesn’t end up sounding very special. The total randomness that gives noise its sound also gives it its sameness. To get tones to sound audibly different, we often have to make them visibly different as well.</p>
       </section>
 
@@ -42,6 +43,7 @@ export default function Lesson2() {
         <p>While we can play each waveform at a certain frequency, the story is actually much more complicated than that. Try playing a sine wave at different pitches, and, just as you’d expect, you’ll notice a very sharp spike in volume at that exact frequency.</p>
         <p>But switch to a square wave, and you’ll see that a bit more is going on. The loudest spike, called the “fundamental frequency” is still at the frequency that you played, but there are a few smaller spikes at higher pitches as well. We call these frequencies “overtones”. While the fundamental frequency gives a note its pitch, the overtones give it its character. (Musicians, taking a queue from creative writers, often substitute “character” for “timbre”, “color”, or “shape”; but they essentially mean the same thing.)</p>
         <p>Left bare, these waveforms can sound annoying and even abrasive – hardly useful as instruments. In the next lesson I’ll discuss the different ways to further shape them so that they appear more pleasing and organic.</p>
+        <Link to="/3">Next</Link>
       </section>
     </article>
   );
