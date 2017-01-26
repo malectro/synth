@@ -45,8 +45,6 @@ export default class Envelope extends PureComponent {
     const insetWidth = width - inset * 2;
     const insetHeight = height - inset * 2;
 
-    console.log('render', width, height);
-
     return (
       <div className={css.container}>
         <Canvas ref={canvas => this.canvas = canvas} onResize={this.handleResize} />
@@ -58,13 +56,12 @@ export default class Envelope extends PureComponent {
   }
 
   handleResize(size, ho) {
-    console.log('hi', size);
     this.setState({size});
   }
 
   draw() {
     const {el, ctx} = this.canvas;
-    const {width, height} = el;
+    const {width, height} = this.state.size;
 
     const insetWidth = width - inset * 2;
     const insetHeight = height - inset * 2;

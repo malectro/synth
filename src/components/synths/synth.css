@@ -81,8 +81,7 @@
 }
 
 .simpleModule .wave {
-  flex: 1 0 0;
-  height: 200px;
+  height: 160px;
   /* not sure why this*/
   width: 320px;
   margin: 20px;
@@ -94,7 +93,7 @@
 }
 
 .wave {
-  flex: 1 0 0;
+  flex: 1 0 auto;
   height: 200px;
   align-self: stretch;
 }
@@ -104,12 +103,9 @@
   composes: module;
 }
 
-.freqModule canvas {
-  margin: 1em 0;
-}
-
 .tics {
   position: absolute;
+  top: 190px;
   width: calc(100% - 4em);
 }
 .tic {

@@ -17,17 +17,9 @@ export default class XYPlot extends PureComponent {
     scale: number,
     limit: number,
     repeatAt: number,
-    size: {
-      width: number | 'auto',
-      height: number | 'auto',
-    },
   };
 
   static defaultProps = {
-    size: {
-      width: 'auto',
-      height: 'auto',
-    },
     sample: 'average',
     scale: 0.05,
     limit: 200,
@@ -50,13 +42,13 @@ export default class XYPlot extends PureComponent {
 
   render() {
     return (
-      <Canvas className={this.props.className} ref={canvas => this.canvas = canvas} size={this.props.size} onResize={this.draw} />
+      <Canvas className={this.props.className} ref={canvas => this.canvas = canvas} onResize={this.draw} />
     );
   }
 
   draw() {
     const {ctx} = this.canvas;
-    const {width, height} = this.canvas.el;
+    const {width, height} = this.canvas.size;
     const {limit, points} = this.props;
 
     const halfHeight = height / 2;

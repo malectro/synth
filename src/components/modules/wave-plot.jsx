@@ -32,7 +32,7 @@ class SimpleWaveformPlot extends PureComponent {
 
   draw() {
     const {ctx} = this.canvas;
-    const {width, height} = this.canvas.el;
+    const {width, height} = this.canvas.size;
     const {repeat, type} = this.props;
 
     const lineWidth = 2;

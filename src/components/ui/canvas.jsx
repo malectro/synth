@@ -29,11 +29,13 @@ export default class Canvas extends PureComponent {
         width: width === 'auto' ? null : width,
         height: height === 'auto' ? null : height,
       },
+      devicePixelRatio: 1,
     };
   }
 
   componentDidMount() {
     this.ctx = this.el.getContext('2d');
+    this.ctx.save();
     this.resize(this.props);
   }
 
@@ -44,10 +46,11 @@ export default class Canvas extends PureComponent {
   }
 
   render() {
+    const {devicePixelRatio} = this.state;
     const {width, height} = this.state.size;
     const {size, onResize, ...props} = this.props;
     return (
-      <canvas {...props} ref={el => this.el = el} width={width} height={height} />
+      <canvas {...props} ref={el => this.el = el} width={width * devicePixelRatio} height={height * devicePixelRatio} />
     );
   }
 
@@ -58,9 +61,20 @@ export default class Canvas extends PureComponent {
         width: width === 'auto' ? this.el.offsetWidth : width,
         height: height === 'auto' ? this.el.offsetHeight : height,
       },
+      devicePixelRatio: window.devicePixelRatio,
     }, () => {
-      this.props.onResize(this.state.size);
+      const {size, devicePixelRatio} = this.state;
+
+      this.ctx.restore();
+      this.ctx.save();
+      this.ctx.scale(devicePixelRatio, devicePixelRatio);
+
+      this.props.onResize(size);
     });
+  }
+
+  get size() {
+    return this.state.size;
   }
 }
 
