@@ -18,7 +18,13 @@ export default class EnvelopeShaper extends Component {
       osc: null,
       gain: null,
       waveType: 'sine',
+      points: [
+        {x: 0, y: 1},
+        {x: 1, y: 1},
+      ],
     };
+
+    this.handleEnvelopeChange = this.handleEnvelopeChange.bind(this);
   }
 
   componentDidMount() {
@@ -41,16 +47,13 @@ export default class EnvelopeShaper extends Component {
   }
 
   render() {
-    const currentType = this.state.osc && this.state.osc.type;
-    const points = [
-      {x: 0, y: 1},
-      {x: 1, y: 1},
-    ];
+    const {points, osc} = this.state;
+    const currentType = osc && osc.type;
 
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <Envelope points={points} />
+          <Envelope points={points} onChange={this.handleEnvelopeChange} />
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (
@@ -61,6 +64,12 @@ export default class EnvelopeShaper extends Component {
         </div>
       </figure>
     );
+  }
+
+  handleEnvelopeChange(points) {
+    this.setState({
+      points,
+    });
   }
 }
 
