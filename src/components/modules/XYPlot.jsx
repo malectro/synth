@@ -1,7 +1,6 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
-import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import Canvas from 'src/components/ui/canvas.jsx';
 

@@ -43,8 +43,9 @@ export default class Canvas extends PureComponent {
 
   render() {
     const {width, height} = this.state.size;
+    const {size, onResize, ...props} = this.props;
     return (
-      <canvas {...this.props} ref={el => this.el = el} width={width} height={height} />
+      <canvas {...props} ref={el => this.el = el} width={width} height={height} />
     );
   }
 

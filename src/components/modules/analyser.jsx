@@ -1,15 +1,14 @@
 /* @flow */
 
 import _ from 'lodash';
-import React, {Component} from 'react';
-import shouldPureComponentUpdate from 'react-pure-render/function';
+import React, {PureComponent} from 'react';
 
 import audio, {SAMPLE_RATE} from 'src/audio';
 
+import Canvas from 'src/components/ui/canvas.jsx';
 
-export default class Module extends Component {
-  shouldComponentUpdate = shouldPureComponentUpdate;
 
+export default class Module extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -91,44 +90,6 @@ export default class Module extends Component {
 
   handleResize() {
     this.draw();
-  }
-}
-
-class Canvas extends Component {
-  shouldComponentUpdate = shouldPureComponentUpdate;
-
-  props: {
-    onResize: Function,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      width: 0,
-      height: 0,
-    };
-  }
-
-  componentDidMount() {
-    this.ctx = this.el.getContext('2d');
-    this.resize();
-  }
-
-  resize() {
-    this.setState({
-      width: this.el.offsetWidth,
-      height: this.el.offsetHeight,
-    }, () => {
-      this.props.onResize();
-    });
-  }
-
-  render() {
-    const {width, height} = this.state;
-    return (
-      <canvas ref={el => this.el = el} width={width} height={height} {...this.props} />
-    );
   }
 }
 

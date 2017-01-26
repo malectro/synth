@@ -2,45 +2,21 @@
 
 import type {WaveType} from 'src/audio';
 
-import React, {Component} from 'react';
-import shouldPureComponentUpdate from 'react-pure-render/function';
+import React, {PureComponent} from 'react';
+
+import Canvas from 'src/components/ui/canvas.jsx';
 
 
-class SimpleWaveformPlot extends Component {
-  shouldComponentUpdate = shouldPureComponentUpdate;
-
+class SimpleWaveformPlot extends PureComponent {
   props: {
     type: WaveType,
     repeat: number,
   };
 
-  state: {
-    size: {
-      width: ?number,
-      height: ?number,
-    },
-  };
+  constructor(...args) {
+    super(...args);
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      size: {
-        width: null,
-        height: null,
-      },
-    };
-  }
-
-  componentDidMount() {
-    this.ctx = this.el.getContext('2d');
-    this.resize(this.props);
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.size !== this.props.size) {
-      this.resize(props);
-    }
+    this.draw = this.draw.bind(this);
   }
 
   componentDidUpdate() {
@@ -48,26 +24,17 @@ class SimpleWaveformPlot extends Component {
   }
 
   render() {
-    const {width, height} = this.state.size;
     const {type, repeat, ...props} = this.props;
     return (
-      <canvas {...props} ref={el => this.el = el} width={width} height={height} />
+      <Canvas {...props} ref={el => this.canvas = el} onResize={this.draw} />
     );
   }
 
-  resize() {
-    this.setState({
-      size: {
-        width: this.el.offsetWidth,
-        height: this.el.offsetHeight,
-      },
-    });
-  }
-
   draw() {
-    const {ctx, state, props} = this;
-    const {repeat} = props;
-    const {width, height} = state.size;
+    const {ctx} = this.canvas;
+    const {width, height} = this.canvas.el;
+    const {repeat, type} = this.props;
+
     const lineWidth = 2;
     const padding = Math.ceil(lineWidth / 2);
 
@@ -86,7 +53,7 @@ class SimpleWaveformPlot extends Component {
     ctx.beginPath();
     ctx.moveTo(0, halfHeight);
 
-    const drawer = waves[props.type];
+    const drawer = waves[type];
 
     for (let x = 0; x < drawWidth; x += period) {
       drawer(ctx, x, period, halfHeight);
