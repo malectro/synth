@@ -1,12 +1,12 @@
 /* @flow */
 
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
+import Canvas from 'src/components/ui/canvas.jsx';
 
-export default class XYPlot extends Component {
-  shouldComponentUpdate = shouldPureComponentUpdate;
 
+export default class XYPlot extends PureComponent {
   props: {
     className: ?string,
     points: {
@@ -35,27 +35,14 @@ export default class XYPlot extends Component {
     repeatAt: 200,
   };
 
-  constructor(props) {
-    super(props);
+  constructor(...args) {
+    super(...args);
 
-    const {width, height} = this.props.size;
-    this.state = {
-      size: {
-        width: width === 'auto' ? 0 : width,
-        height: height === 'auto' ? 0 : height,
-      },
-    };
+    this.draw = this.draw.bind(this);
   }
 
   componentDidMount() {
-    this.ctx = this.el.getContext('2d');
-    this.resize(this.props);
-  }
-
-  componentWillReceiveProps(props) {
-    if (props.size !== this.props.size) {
-      this.resize(props);
-    }
+    this.draw();
   }
 
   componentDidUpdate() {
@@ -63,26 +50,15 @@ export default class XYPlot extends Component {
   }
 
   render() {
-    const {width, height} = this.state.size;
     return (
-      <canvas className={this.props.className} ref={el => this.el = el} width={width} height={height} />
+      <Canvas className={this.props.className} ref={canvas => this.canvas = canvas} size={this.props.size} onResize={this.draw} />
     );
   }
 
-  resize({size}) {
-    const {width, height} = size;
-    this.setState({
-      size: {
-        width: width === 'auto' ? this.el.offsetWidth : width,
-        height: height === 'auto' ? this.el.offsetHeight : height,
-      },
-    });
-  }
-
   draw() {
-    const {ctx, props, state} = this;
-    const {width, height} = state.size;
-    const {limit, points} = props;
+    const {ctx} = this.canvas;
+    const {width, height} = this.canvas.el;
+    const {limit, points} = this.props;
 
     const halfHeight = height / 2;
     const margin = 2;
@@ -98,7 +74,7 @@ export default class XYPlot extends Component {
     const negativeScale = 1 / (range.negative.max - range.negative.min);
 
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = `rgb(150, 150, 150)`;
+    ctx.fillStyle = 'rgb(150, 150, 150)';
 
     for (let i = 0; i < limit; i++) {
       const maxPeak = (maxPeaks[i] - range.positive.min) * positiveScale;

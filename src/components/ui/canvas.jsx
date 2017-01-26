@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 
-export default class Canvas extends Component {
+export default class Canvas extends PureComponent {
   props: {
     size: {
       width: number | 'auto',
       height: number | 'auto',
     },
+    onResize: () => void,
   };
 
   static defaultProps = {
@@ -14,6 +15,7 @@ export default class Canvas extends Component {
       width: 'auto',
       height: 'auto',
     },
+    onResize: () => {},
   };
 
   constructor(props) {
@@ -53,6 +55,8 @@ export default class Canvas extends Component {
         width: width === 'auto' ? this.el.offsetWidth : width,
         height: height === 'auto' ? this.el.offsetHeight : height,
       },
+    }, () => {
+      this.props.onResize();
     });
   }
 }
