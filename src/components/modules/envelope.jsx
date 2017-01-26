@@ -128,6 +128,7 @@ export default class Envelope extends PureComponent {
     ctx.save();
 
     ctx.translate(inset, inset);
+    ctx.beginPath();
     ctx.moveTo(0, insetHeight);
 
     this.props.points.forEach(({x, y}) => {
