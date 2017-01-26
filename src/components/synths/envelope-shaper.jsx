@@ -42,10 +42,15 @@ export default class EnvelopeShaper extends Component {
 
   render() {
     const currentType = this.state.osc && this.state.osc.type;
+    const points = [
+      {x: 0, y: 1},
+      {x: 1, y: 1},
+    ];
+
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <Envelope />
+          <Envelope points={points} />
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (

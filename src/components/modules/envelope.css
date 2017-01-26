@@ -1,11 +1,18 @@
 
 .container {
+  position: relative;
   height: 200px;
 }
 
 .container canvas {
   display: flex;
   flex: 1 0 auto;
-  background: green;
+}
+
+.handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
 }
 

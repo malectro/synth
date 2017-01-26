@@ -1,3 +1,5 @@
+/* @flow */
+
 import React, {PureComponent} from 'react';
 
 
@@ -57,7 +59,7 @@ export default class Canvas extends PureComponent {
         height: height === 'auto' ? this.el.offsetHeight : height,
       },
     }, () => {
-      this.props.onResize();
+      this.props.onResize(this.state.size);
     });
   }
 }
