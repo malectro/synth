@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, {PureComponent} from 'react';
+import clamp from 'lodash/clamp';
 import sculpt from 'sculpt';
 
 import css from './envelope.css';
@@ -99,8 +100,8 @@ export default class Envelope extends PureComponent {
     const points = sculpt(this.props.points, {
       [this.movingPoint]: {
         $assign: {
-          x: x + deltaX,
-          y: y - deltaY,
+          x: clamp(x + deltaX, 0, 1),
+          y: clamp(y - deltaY, 0, 1),
         },
       },
     });
