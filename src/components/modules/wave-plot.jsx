@@ -104,5 +104,12 @@ const waves = {
     ctx.lineTo(start + halfWidth, amp * 2);
     ctx.lineTo(start + width, amp);
   },
+
+  'noise': (ctx, start, width, amp) => {
+    const step = 2;
+    for (let x = start; x <= start + width; x += step) {
+      ctx.lineTo(x, amp * 2 * Math.random());
+    }
+  },
 };
 

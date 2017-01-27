@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
+import audio, {SAMPLE_RATE, createNoiseNode} from 'src/audio';
 import css from './synth.css';
 
 import Envelope from 'src/components/modules/envelope.jsx';
@@ -16,6 +16,7 @@ export default class EnvelopeShaper extends Component {
 
     this.state = {
       osc: null,
+      noise: null,
       gain: null,
       waveType: 'sine',
       points: [
@@ -36,6 +37,8 @@ export default class EnvelopeShaper extends Component {
     osc.frequency.value = 440;
     osc.type = this.state.waveType;
 
+    const noise = createNoiseNode();
+
     const gain = audio.createGain();
     gain.gain.value = 0;
 
@@ -44,22 +47,24 @@ export default class EnvelopeShaper extends Component {
     gain.connect(audio.destination);
 
     osc.start();
+    noise.start();
 
     this.setState({
-      osc, gain,
+      osc, gain, noise,
     });
   }
 
   componentWillUnmount() {
-    const {osc, gain} = this.state;
+    const {osc, noise, gain} = this.state;
     osc.stop();
     osc.disconnect();
+    noise.stop();
+    noise.disconnect();
     gain.disconnect();
   }
 
   render() {
-    const {points, osc} = this.state;
-    const currentType = osc && osc.type;
+    const {points, osc, waveType} = this.state;
 
     return (
       <figure className={css.module}>
@@ -67,8 +72,8 @@ export default class EnvelopeShaper extends Component {
           <Envelope points={points} onChange={this.handleEnvelopeChange} />
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
-            { ['sine', 'sawtooth', 'triangle', 'square'].map(type => (
-              <WavePlot className={currentType === type ? css.waveSelected : css.wave} key={type} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
+            { ['sine', 'sawtooth', 'square', 'noise'].map(type => (
+              <WavePlot className={waveType === type ? css.waveSelected : css.wave} key={type} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
             )) }
           </div>
           <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>
@@ -115,10 +120,20 @@ export default class EnvelopeShaper extends Component {
   }
 
   handleTypeChange(waveType) {
-    const {osc} = this.state;
-    osc.type = waveType;
-    console.log('changing', waveType);
-    this.setState({osc, waveType});
+    const {noise, osc, gain} = this.state;
+
+    console.log('type', waveType);
+
+    if (waveType === 'noise') {
+      osc.disconnect();
+      noise.connect(gain);
+    } else {
+      noise.disconnect();
+      osc.connect(gain);
+      osc.type = waveType;
+    }
+
+    this.setState({osc, noise, waveType});
   }
 }
 
