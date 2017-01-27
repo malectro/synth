@@ -84,6 +84,15 @@ export default class EnvelopeShaper extends Component {
   }
 
   handleEnvelopeChange(points) {
+    // apply constraints. these mutations dont affect immutability comparisons
+    // because the values are permanent.
+
+    // attack always goes to 1
+    points[0].y = 1;
+
+    // release has same y as susatain/decay
+    points[2].y = points[1].y;
+
     this.setState({
       points,
     });
