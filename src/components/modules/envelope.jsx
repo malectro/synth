@@ -87,6 +87,8 @@ export default class Envelope extends PureComponent {
   }
 
   handleMouseMove(event) {
+    event.preventDefault();
+
     const {x, y} = this.mouseDownHandlePosition;
     const {clientX, clientY} = event;
     const {width, height} = this.state.size;
