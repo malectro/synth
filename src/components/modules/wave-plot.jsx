@@ -9,7 +9,7 @@ import Canvas from 'src/components/ui/canvas.jsx';
 
 class SimpleWaveformPlot extends PureComponent {
   props: {
-    type: WaveType,
+    type: WaveType | 'noise',
     repeat: number,
   };
 
@@ -19,8 +19,10 @@ class SimpleWaveformPlot extends PureComponent {
     this.draw = this.draw.bind(this);
   }
 
-  componentDidUpdate() {
-    this.draw();
+  componentDidUpdate(prevProps) {
+    if (prevProps.type !== this.props.type) {
+      this.draw();
+    }
   }
 
   render() {
