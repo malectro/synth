@@ -21,8 +21,7 @@ export default class EnvelopeShaper extends Component {
       waveType: 'sine',
       points: [
         {x: 0, y: 1},
-        {x: 0.25, y: 0.8},
-        {x: 0.5, y: 0.8},
+        {x: 1, y: 1},
       ],
     };
 
@@ -104,24 +103,20 @@ export default class EnvelopeShaper extends Component {
     const attackTime = now + duration * attackDuration;
     gain.gain.linearRampToValueAtTime(attackAmp, attackTime);
     gain.gain.linearRampToValueAtTime(decayAmp, now + duration * decayDuration);
+    gain.gain.linearRampToValueAtTime(0, now + duration + 0.01);
   }
 
   handleKeyMove(freq) {
+    return;
     const now = audio.currentTime;
     this.state.osc.frequency.linearRampToValueAtTime(freq, now + 0.01);
   }
 
   handleKeyRelease(freq) {
+    return;
     const now = audio.currentTime;
-    const {gain, points} = this.state;
-
-    const {x: releaseX} = points[2];
-    const releaseDuration = 1 - releaseX;
-
-    const maxRelease = 1;
-
-    gain.gain.cancelScheduledValues(0);
-    gain.gain.linearRampToValueAtTime(0, now + releaseDuration * maxRelease);
+    this.state.gain.gain.cancelScheduledValues(0);
+    this.state.gain.gain.linearRampToValueAtTime(0, now + 0.2);
   }
 
   handleTypeChange(waveType) {

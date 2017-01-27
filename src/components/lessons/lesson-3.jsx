@@ -2,6 +2,7 @@ import React from 'react';
 
 import lessonCss from './lesson.css';
 
+import SimpleEnvelopeShaper from 'src/components/synths/simple-envelope-shaper.jsx';
 import EnvelopeShaper from 'src/components/synths/envelope-shaper.jsx';
 
 
@@ -15,11 +16,18 @@ export default function Lesson() {
         <p>Sound designers like to draw an instrument’s loudness (amplitude) over time as a line graph, and up until now all the sounds we’ve played have looked like this:</p>
       </section>
 
-      <EnvelopeShaper />
+      <SimpleEnvelopeShaper />
 
       <section>
         <p>But as luck would have it, this module lets you move the attack and decay points around. To make the synth sound “plucked” you can move the decay point all the way down and well to the right. A clap would have a shorter decay, but moving the decay point to the left isn’t quite going to do it. Another important thing about a clap (and a lot of percussion for that matter) is that it’s atonal (toneless) – just like noise. Switching the generator from sawtooth to noise should get you a lot closer.</p>
         <p>So what about wind instruments? They usually aren’t caused by smacking together of objects, and (with circular breathing*(actually a thing)) they can be sustained indefinitely. To imitate this, the next module has two more editable points: “sustain” and “release”.</p>
+      </section>
+
+      <EnvelopeShaper />
+
+      <section>
+        <p>Altogether “attack”, “decay”, “sustain”, and “release” construct the shape of a sound’s “envelope”. A saxophonist might play a loud initial attack to emphasize the note, let the volume decay slightly, sustain the note, and then release the note entirely. This can easily be played on a keyboard where the press, force of the press, and the release are all recorded; but a computer keyboard and mouse have no notion of force so we’re left with the just the two.</p>
+        <p>Envelopes are a critical part to what gives a sound its character. To complement this, the next lesson will cover basic subtractive synthesis using filters.</p>
       </section>
     </article>
   );
