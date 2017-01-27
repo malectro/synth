@@ -89,19 +89,26 @@ export default class EnvelopeShaper extends Component {
     const {x: attackDuration, y: attackAmp} = points[0];
     const {x: decayDuration, y: decayAmp} = points[1];
 
-    osc.frequency.linearRampToValueAtTime(freq, now + 0.01);
+    const duration = 1;
 
-    const attackTime = now + 2 * attackDuration;
+    osc.frequency.linearRampToValueAtTime(freq, now + 0.001);
+
+    gain.gain.cancelScheduledValues(0);
+
+    const attackTime = now + duration * attackDuration;
     gain.gain.linearRampToValueAtTime(attackAmp, attackTime);
-    gain.gain.linearRampToValueAtTime(decayAmp, attackTime + 2 * decayDuration);
+    gain.gain.linearRampToValueAtTime(decayAmp, now + duration * decayDuration);
+    gain.gain.linearRampToValueAtTime(0, now + duration + 0.01);
   }
 
   handleKeyMove(freq) {
+    return;
     const now = audio.currentTime;
     this.state.osc.frequency.linearRampToValueAtTime(freq, now + 0.01);
   }
 
   handleKeyRelease(freq) {
+    return;
     const now = audio.currentTime;
     this.state.gain.gain.cancelScheduledValues(0);
     this.state.gain.gain.linearRampToValueAtTime(0, now + 0.2);
