@@ -89,6 +89,7 @@ export default class Envelope extends PureComponent {
   handleMouseMove(event) {
     event.preventDefault();
 
+    const {movingPoint} = this;
     const {x, y} = this.mouseDownHandlePosition;
     const {clientX, clientY} = event;
     const {width, height} = this.state.size;
@@ -99,16 +100,27 @@ export default class Envelope extends PureComponent {
     const deltaX = clientDeltaX / width;
     const deltaY = clientDeltaY / height;
 
-    const points = sculpt(this.props.points, {
-      [this.movingPoint]: {
-        $assign: {
-          x: clamp(x + deltaX, 0, 1),
-          y: clamp(y - deltaY, 0, 1),
-        },
-      },
+    const newPoint = {
+      x: clamp(x + deltaX, 0, 1),
+      y: clamp(y - deltaY, 0, 1),
+    };
+
+    const newPoints = this.props.points.map((point, i) => {
+      if (i < movingPoint) {
+        if (point.x > newPoint.x) {
+          point = {...point, x: newPoint.x};
+        }
+      } else if (i === movingPoint) {
+        point = newPoint;
+      } else if (i > movingPoint) {
+        if (point.x < newPoint.x) {
+          point = {...point, x: newPoint.x};
+        }
+      }
+      return point;
     });
 
-    this.props.onChange(points);
+    this.props.onChange(newPoints);
   }
 
   handleMouseUp() {
