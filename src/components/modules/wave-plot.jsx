@@ -20,7 +20,7 @@ class SimpleWaveformPlot extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.type !== this.props.type) {
+    if (prevProps.type !== this.props.type || prevProps.repeat !== this.props.repeat) {
       this.draw();
     }
   }
