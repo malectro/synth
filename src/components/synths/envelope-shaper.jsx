@@ -82,7 +82,7 @@ export default class EnvelopeShaper extends Component {
               <WavePlot className={waveType === type ? css.waveSelected : css.wave} key={type} type={type} repeat={0.5} onClick={() => this.handleTypeChange(type)} />
             )) }
           </div>
-          <figcaption>A frequency spectrum shows us the “loudness” of a sound at every audible frequency.</figcaption>
+          <figcaption>"Sustain" and "decay" are tied to the middle point. "Attack" and "release" represent duration, so they aren't volume adjustable.</figcaption>
         </div>
       </figure>
     );
