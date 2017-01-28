@@ -1,6 +1,7 @@
 /* @flow */
 
 import React, {Component} from 'react';
+import clamp from 'lodash/clamp';
 
 import audio, {SAMPLE_RATE, createNoiseNode} from 'src/audio';
 import css from './synth.css';
@@ -9,6 +10,9 @@ import Envelope from 'src/components/modules/envelope.jsx';
 import Keyboard from 'src/components/modules/keyboard.jsx';
 import WavePlot from 'src/components/modules/wave-plot.jsx';
 
+
+const maxAttackDecayDuration = 2;
+const maxReleaseDuration = 2;
 
 export default class EnvelopeShaper extends Component {
   constructor(props) {
@@ -24,6 +28,7 @@ export default class EnvelopeShaper extends Component {
         {x: 0.25, y: 0.8},
         {x: 0.5, y: 0.8},
       ],
+      progress: null,
     };
 
     this.handleEnvelopeChange = this.handleEnvelopeChange.bind(this);
@@ -65,12 +70,12 @@ export default class EnvelopeShaper extends Component {
   }
 
   render() {
-    const {points, osc, waveType} = this.state;
+    const {points, osc, waveType, progress} = this.state;
 
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <Envelope points={points} onChange={this.handleEnvelopeChange} />
+          <Envelope points={points} progress={progress} onChange={this.handleEnvelopeChange} />
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'square', 'noise'].map(type => (
@@ -101,18 +106,19 @@ export default class EnvelopeShaper extends Component {
   handleKeyPress(freq) {
     const now = audio.currentTime;
     const {osc, gain, points} = this.state;
-    const {x: attackDuration, y: attackAmp} = points[0];
-    const {x: decayDuration, y: decayAmp} = points[1];
-
-    const duration = 1;
+    const {x: attackX, y: attackAmp} = points[0];
+    const {x: decayX, y: decayAmp} = points[1];
 
     osc.frequency.linearRampToValueAtTime(freq, now + 0.001);
 
     gain.gain.cancelScheduledValues(0);
 
-    const attackTime = now + duration * attackDuration;
+    const attackTime = now + maxAttackDecayDuration * attackX;
     gain.gain.linearRampToValueAtTime(attackAmp, attackTime);
-    gain.gain.linearRampToValueAtTime(decayAmp, now + duration * decayDuration);
+    gain.gain.linearRampToValueAtTime(decayAmp, now + maxAttackDecayDuration * decayX);
+
+    this.pressing = now;
+    this.animate();
   }
 
   handleKeyMove(freq) {
@@ -127,10 +133,11 @@ export default class EnvelopeShaper extends Component {
     const {x: releaseX} = points[2];
     const releaseDuration = 1 - releaseX;
 
-    const maxRelease = 1;
-
     gain.gain.cancelScheduledValues(0);
-    gain.gain.linearRampToValueAtTime(0, now + releaseDuration * maxRelease);
+    gain.gain.linearRampToValueAtTime(0, now + releaseDuration * maxReleaseDuration);
+
+    this.pressing = null;
+    this.released = now;
   }
 
   handleTypeChange(waveType) {
@@ -146,6 +153,35 @@ export default class EnvelopeShaper extends Component {
     }
 
     this.setState({osc, noise, waveType});
+  }
+
+  animate() {
+    const {points} = this.state;
+
+    let progress;
+    if (this.pressing) {
+      const duration = points[1].x * maxAttackDecayDuration;
+      const attackProgress = clamp((audio.currentTime - this.pressing) / duration, 0, 1);
+      progress = attackProgress * points[1].x;
+
+    } else if (this.released) {
+      const releaseDuration = (1 - points[2].x) * maxReleaseDuration;
+      const releaseProgress = clamp((audio.currentTime - this.released) / releaseDuration, 0, 1);
+      progress = releaseProgress * (1 - points[2].x) + points[2].x;
+    }
+
+    this.setState({
+      progress,
+    });
+
+    const sinceReleased = audio.currentTime - this.released;
+    const releaseDuration = (1 - points[2].x) * maxReleaseDuration;
+
+    if (this.pressing || sinceReleased < releaseDuration) {
+      requestAnimationFrame(this.animate.bind(this));
+    } else {
+      this.setState({progress: null});
+    }
   }
 }
 

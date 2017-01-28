@@ -20,6 +20,7 @@ type Points = {
 export default class Envelope extends PureComponent {
   props: {
     points: Points,
+    progress?: number,
     onChange: (points: Points) => void,
   };
 
@@ -131,6 +132,7 @@ export default class Envelope extends PureComponent {
   draw() {
     const {el, ctx} = this.canvas;
     const {width, height} = this.state.size;
+    const {points, progress} = this.props;
 
     const insetWidth = width - inset * 2;
     const insetHeight = height - inset * 2;
@@ -141,17 +143,25 @@ export default class Envelope extends PureComponent {
     ctx.clearRect(0, 0, width, height);
 
     ctx.save();
-
     ctx.translate(inset, inset);
+
     ctx.beginPath();
     ctx.moveTo(0, insetHeight);
 
-    this.props.points.forEach(({x, y}) => {
+    points.forEach(({x, y}) => {
       ctx.lineTo(x * insetWidth, insetHeight - y * insetHeight);
     });
 
     ctx.lineTo(insetWidth, insetHeight);
     ctx.stroke();
+
+    if (progress) {
+      ctx.clip();
+      ctx.fillStyle = '#444';
+      ctx.beginPath();
+
+      ctx.fillRect(0, 0, insetWidth * progress, insetHeight);
+    }
 
     ctx.restore();
   }
