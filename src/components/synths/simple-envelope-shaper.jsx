@@ -23,6 +23,7 @@ export default class EnvelopeShaper extends Component {
         {x: 0, y: 1},
         {x: 1, y: 1},
       ],
+      progress: null,
     };
 
     this.handleEnvelopeChange = this.handleEnvelopeChange.bind(this);
@@ -64,12 +65,12 @@ export default class EnvelopeShaper extends Component {
   }
 
   render() {
-    const {points, osc, waveType} = this.state;
+    const {points, osc, waveType, progress} = this.state;
 
     return (
       <figure className={css.module}>
         <div className={css.container}>
-          <Envelope points={points} onChange={this.handleEnvelopeChange} />
+          <Envelope points={points} progress={progress} onChange={this.handleEnvelopeChange} />
           <Keyboard onPress={this.handleKeyPress} onMove={this.handleKeyMove} onRelease={this.handleKeyRelease} />
           <div className={css.waveSelect}>
             { ['sine', 'sawtooth', 'square', 'noise'].map(type => (
@@ -104,6 +105,9 @@ export default class EnvelopeShaper extends Component {
     gain.gain.linearRampToValueAtTime(attackAmp, attackTime);
     gain.gain.linearRampToValueAtTime(decayAmp, now + duration * decayDuration);
     gain.gain.linearRampToValueAtTime(0, now + duration + 0.01);
+
+    this.startTime = now;
+    this.animate();
   }
 
   handleKeyMove(freq) {
@@ -132,6 +136,17 @@ export default class EnvelopeShaper extends Component {
     }
 
     this.setState({osc, noise, waveType});
+  }
+
+  animate() {
+    const progress = (audio.currentTime - this.startTime) / 1;
+
+    if (progress > 1) {
+      this.setState({progress: null});
+    } else {
+      this.setState({progress});
+      requestAnimationFrame(::this.animate);
+    }
   }
 }
 

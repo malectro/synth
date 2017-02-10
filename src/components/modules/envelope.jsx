@@ -44,11 +44,14 @@ export default class Envelope extends PureComponent {
     };
 
     this.handleResize = this.handleResize.bind(this);
+
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
 
-    // TODO (kyle): handle touch
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   componentDidUpdate() {
@@ -65,7 +68,7 @@ export default class Envelope extends PureComponent {
       <div className={css.container}>
         <Canvas ref={canvas => this.canvas = canvas} onResize={this.handleResize} />
         { this.props.points.map(({x, y}, i) => (
-          <div className={css.handle} key={i} style={{left: x * insetWidth, top: insetHeight - y * insetHeight}} onMouseDown={this.handleMouseDown.bind(this, i)} />
+          <div className={css.handle} key={i} style={{left: x * insetWidth, top: insetHeight - y * insetHeight}} onMouseDown={this.handleMouseDown.bind(this, i)} onTouchStart={this.handleTouchStart.bind(this, i)} />
         )) }
       </div>
     );
@@ -88,7 +91,9 @@ export default class Envelope extends PureComponent {
   }
 
   handleMouseMove(event) {
-    event.preventDefault();
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
 
     const {movingPoint} = this;
     const {x, y} = this.mouseDownHandlePosition;
@@ -127,6 +132,37 @@ export default class Envelope extends PureComponent {
   handleMouseUp() {
     window.removeEventListener('mousemove', this.handleMouseMove);
     window.removeEventListener('mouseup', this.handleMouseUp);
+  }
+
+  handleTouchStart(pointIndex, event) {
+    event.preventDefault();
+
+    const point = this.props.points[pointIndex];
+    const touch = event.changedTouches[0];
+    const {clientX, clientY} = touch;
+
+    this.mouseDownPosition = {clientX, clientY};
+    this.mouseDownHandlePosition = point;
+    this.movingPoint = pointIndex;
+
+    window.addEventListener('touchmove', this.handleTouchMove, {passive: false});
+    window.addEventListener('touchend', this.handleTouchEnd, {passive: false});
+  }
+
+  handleTouchMove(event) {
+    event.preventDefault();
+
+    const touch = event.changedTouches[0];
+    this.handleMouseMove(touch);
+  }
+
+  handleTouchEnd(event) {
+    event.preventDefault();
+
+    const touch = event.changedTouches[0];
+
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('touchend', this.handleTouchEnd);
   }
 
   draw() {
