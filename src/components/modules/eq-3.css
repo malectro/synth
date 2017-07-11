@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  height: 100px;
+}
+
+.container > * {
+  margin-right: 10px;
+}
+

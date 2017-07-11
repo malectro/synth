@@ -23,3 +23,20 @@
   cursor: move;
 }
 
+
+.slider.vertical {
+  width: 20px;
+  height: auto;
+  flex-flow: column;
+}
+
+.slider.vertical .progress {
+  min-width: 0;
+  min-height: 20px;
+  flex-flow: column;
+}
+
+.slider.vertical .handle {
+  width: auto;
+  height: 20px;
+}

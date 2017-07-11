@@ -18,6 +18,7 @@ export default class Slider extends Component {
     min: number,
     className: ?string,
     onChange: (value: number) => void,
+    orientation: 'horizontal' | 'vertical',
   };
 
   static defaultProps = {
@@ -25,10 +26,15 @@ export default class Slider extends Component {
     max: 100,
     min: 0,
     onChange: _.noop,
+    orientation: 'horizontal',
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      vertical: this.props.orientation === 'vertical',
+    };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -39,12 +45,25 @@ export default class Slider extends Component {
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      vertical: nextProps.orientation === 'vertical',
+    });
+  }
+
   render() {
-    const {value, max, min, className} = this.props;
-    const percent = (value - min) * 100 / (max - min);
+    const {value, max, min, className, orientation} = this.props;
+    const {vertical} = this.state;
+
+    let percent = (value - min) * 100 / (max - min);
+    if (vertical) {
+      percent = 100 - percent;
+    }
+    const dimension = !vertical ? 'width' : 'height';
+
     return (
-      <div className={classify(css.slider, className)} ref={el => this.el = el} onTouchStart={this.handleTouchStart}>
-        <div className={css.progress} style={{width: `${percent}%`}}>
+      <div className={classify(css.slider, css[orientation], className)} ref={el => this.el = el} onTouchStart={this.handleTouchStart}>
+        <div className={css.progress} style={{[dimension]: `${percent}%`}}>
           <div className={css.handle} onMouseDown={this.handleMouseDown}></div>
         </div>
       </div>
@@ -60,7 +79,12 @@ export default class Slider extends Component {
 
   handleMouseMove(event) {
     const {max, min} = this.props;
-    const percent = _.clamp((event.clientX - this.rect.left) / this.rect.width, 0, 1);
+    let percent;
+    if (this.state.vertical) {
+      percent = 1 - _.clamp((event.clientY - this.rect.top) / this.rect.height, 0, 1);
+    } else {
+      percent = _.clamp((event.clientX - this.rect.left) / this.rect.width, 0, 1);
+    }
     const newValue = percent * (max - min) + min;
 
     this.props.onChange(newValue);

@@ -30,7 +30,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.5.0",
-    "classify": "git@github.com:malectro/classify.git",
+    "classify": "git+ssh://git@github.com:malectro/classify.git",
     "css-loader": "^0.23.1",
     "deep-freeze": "0.0.1",
     "express": "^4.13.4",
@@ -48,7 +48,7 @@
     "redux": "^3.3.1",
     "rimraf": "^2.5.2",
     "scroll-behavior": "^0.4.0",
-    "sculpt": "git@github.com:malectro/sculpt",
+    "sculpt": "git+ssh://git@github.com:malectro/sculpt.git",
     "serialize-javascript": "^1.2.0",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.13"
