@@ -14,6 +14,7 @@ export default class SoundPlayer extends Component {
   props: {
     onGetSource?: Function,
     source?: Object,
+    destination?: Object,
     duration: number,
     loop: boolean,
   };
@@ -64,7 +65,9 @@ export default class SoundPlayer extends Component {
   start() {
     const {loop, duration} = this.props;
     const source = this.props.source || this.props.onGetSource();
-    source.connect(audio.destination);
+    if (this.props.destination !== null) {
+      source.connect(this.props.destination || audio.destination);
+    }
     source.loop = loop;
     source.start();
 

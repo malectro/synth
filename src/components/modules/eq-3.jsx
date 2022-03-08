@@ -71,7 +71,7 @@ export default class EQ3 extends Component {
     const {highshelf} = this.state;
     if (source && highshelf) {
       console.log('hi', source, this.state.highshelf);
-      source.connect(this.state.highshelf);
+      source.connect(highshelf);
     }
   }
   connectOutput(output) {

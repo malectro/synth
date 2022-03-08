@@ -10,6 +10,7 @@ import Envelope from '../modules/envelope.tsx';
 import Keyboard from '../modules/keyboard.tsx';
 import WavePlot from '../modules/wave-plot.tsx';
 import EQ3 from '../modules/eq-3.jsx';
+import Player from '../modules/player.tsx';
 
 
 const maxAttackDecayDuration = 2;
@@ -41,7 +42,7 @@ export default class EQ3Player extends Component {
   componentDidMount() {
     const noise = createNoiseNode();
 
-    noise.start();
+    //noise.start();
 
     this.setState({
       noise,
@@ -58,6 +59,9 @@ export default class EQ3Player extends Component {
     return (
       <figure className={css.module}>
         <div className={css.container}>
+          <Player source={this.state.noise} destination={null} duration={2000}>
+            <div style={{height: 200}} />
+          </Player>
           <EQ3 source={this.state.noise} output={this.state.destination} />
         </div>
       </figure>
