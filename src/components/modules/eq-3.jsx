@@ -2,11 +2,11 @@
 
 import React, {Component} from 'react';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
+import audio, {SAMPLE_RATE} from '../../audio.ts';
 
-import Slider from 'src/components/ui/slider.jsx';
+import Slider from '../ui/slider.tsx';
 
-import css from './eq-3.css';
+import css from './eq-3.module.css';
 
 
 export default class EQ3 extends Component {

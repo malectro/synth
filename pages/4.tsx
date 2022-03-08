@@ -1,9 +1,9 @@
 import React from 'react';
 
-import lessonCss from './lesson.css';
+import lessonCss from '../src/components/lessons/lesson.module.css';
 
-import EQ3 from 'src/components/synths/eq-3.jsx';
-import EnvelopeShaper from 'src/components/synths/envelope-shaper.jsx';
+import EQ3 from '../src/components/synths/eq-3.jsx';
+import EnvelopeShaper from '../src/components/synths/envelope-shaper.jsx';
 
 
 export default function Lesson() {
