@@ -6,11 +6,11 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import css from './synth.css';
-import audio from 'src/audio';
+import css from './synth.module.css';
+import audio from '../../audio.ts';
 
-import WavePlot from 'src/components/modules/wave-plot.jsx';
-import SoundPlayer from 'src/components/modules/player.jsx';
+import WavePlot from '../modules/wave-plot.tsx';
+import SoundPlayer from '../modules/player.tsx';
 
 
 const noiseTime = 4;

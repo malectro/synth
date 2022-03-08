@@ -4,9 +4,9 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import css from './synth.css';
+import css from './synth.module.css';
 
-import SimpleWaveform from 'src/components/synths/simple-waveform.jsx';
+import SimpleWaveform from './simple-waveform.tsx';
 
 
 export default () => (

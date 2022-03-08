@@ -6,11 +6,11 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import {SAMPLE_RATE} from 'src/audio';
-import css from './synth.css';
+import {SAMPLE_RATE} from '../../audio.ts';
+import css from './synth.module.css';
 
-import SimpleWaveform from 'src/components/synths/simple-waveform.jsx';
-import Slider from 'src/components/ui/slider.jsx';
+import SimpleWaveform from './simple-waveform.tsx';
+import Slider from '../ui/slider.tsx';
 
 
 const max = 1000;
@@ -32,7 +32,7 @@ export default class Module extends Component {
       frequency: 220,
     };
 
-    (this: any).handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   render() {

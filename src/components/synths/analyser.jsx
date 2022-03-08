@@ -4,12 +4,12 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
-import css from './synth.css';
+import audio, {SAMPLE_RATE} from '../../audio.ts';
+import css from './synth.module.css';
 
-import Spectrum from 'src/components/modules/analyser.jsx';
-import Keyboard from 'src/components/modules/keyboard.jsx';
-import WavePlot from 'src/components/modules/wave-plot.jsx';
+import Spectrum from '../modules/analyser.jsx';
+import Keyboard from '../modules/keyboard.tsx';
+import WavePlot from '../modules/wave-plot.tsx';
 
 
 export default class Module extends Component {

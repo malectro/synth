@@ -1,9 +1,9 @@
 .module {
-  composes: module from 'src/components/synths/synth.css';
+  composes: module from '../../synths/synth.module.css';
 }
 
 .container {
-  composes: container from 'src/components/synths/synth.css';
+  composes: container from '../../synths/synth.module.css';
   flex-flow: column;
 }
 

@@ -1,9 +1,7 @@
-/* @flow */
-
 import _ from 'lodash';
 import React, {Component} from 'react';
 
-import css from './noise-and-shapes.css';
+import css from './noise-and-shapes.module.css';
 
 
 export default class NoiseAndShapes extends Component {

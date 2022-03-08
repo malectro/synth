@@ -4,7 +4,7 @@ import type {WaveType} from 'src/audio';
 
 import React, {PureComponent} from 'react';
 
-import Canvas from 'src/components/ui/canvas.jsx';
+import Canvas from '../ui/canvas.tsx';
 
 
 class SimpleWaveformPlot extends PureComponent {
@@ -33,8 +33,14 @@ class SimpleWaveformPlot extends PureComponent {
   }
 
   draw() {
-    const {ctx} = this.canvas;
-    const {width, height} = this.canvas.size;
+    const {canvas} = this;
+
+    if (!canvas) {
+      return;
+    }
+
+    const {ctx} = canvas;
+    const {width, height} = canvas.size;
     const {repeat, type} = this.props;
 
     const lineWidth = 2;

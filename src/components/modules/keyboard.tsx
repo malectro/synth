@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import css from './keyboard.css';
+import css from './keyboard.module.css';
 
 
 

@@ -3,9 +3,9 @@
 import _ from 'lodash';
 import React, {PureComponent} from 'react';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
+import audio, {SAMPLE_RATE} from '../../audio.ts';
 
-import Canvas from 'src/components/ui/canvas.jsx';
+import Canvas from '../ui/canvas.tsx';
 
 
 export default class Module extends PureComponent {
@@ -39,7 +39,9 @@ export default class Module extends PureComponent {
   }
 
   draw() {
-    if (this.unmounted) {
+    const {canvas, unmounted} = this;
+
+    if (unmounted || !canvas) {
       return;
     }
 
