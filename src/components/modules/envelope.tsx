@@ -4,9 +4,9 @@ import React, {PureComponent} from 'react';
 import clamp from 'lodash/clamp';
 import sculpt from 'sculpt';
 
-import css from './envelope.css';
+import css from './envelope.module.css';
 
-import Canvas from 'src/components/ui/canvas.jsx';
+import Canvas from '../ui/canvas.tsx';
 
 
 const nodeWidth = 10;

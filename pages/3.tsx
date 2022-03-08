@@ -1,10 +1,10 @@
 import React from 'react';
-import {Link} from 'react-router';
+import Link from 'next/link';
 
-import lessonCss from './lesson.css';
+import lessonCss from '../src/components/lessons/lesson.module.css';
 
-import SimpleEnvelopeShaper from 'src/components/synths/simple-envelope-shaper.jsx';
-import EnvelopeShaper from 'src/components/synths/envelope-shaper.jsx';
+import SimpleEnvelopeShaper from '../src/components/synths/simple-envelope-shaper.jsx';
+import EnvelopeShaper from '../src/components/synths/envelope-shaper.jsx';
 
 
 export default function Lesson() {
@@ -29,7 +29,7 @@ export default function Lesson() {
       <section>
         <p>Altogether “attack”, “decay”, “sustain”, and “release” construct the shape of a sound’s “envelope”. A saxophonist might play a loud initial attack to emphasize the note, let the volume decay slightly, sustain the note, and then release the note entirely. This can easily be played on a keyboard where the press, force of the press, and the release are all recorded; but a computer keyboard and mouse have no notion of force so we’re left with the just the other two.</p>
         <p>Envelopes are a critical part to what gives a sound its character, and in practice they can control much more than volume. To complement this, the next lesson will cover basic subtractive synthesis using filters.</p>
-        <Link to="/4">Next</Link>
+        <Link href="/4">Next</Link>
       </section>
     </article>
   );

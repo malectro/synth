@@ -2,12 +2,12 @@
 
 import React, {Component} from 'react';
 
-import audio, {SAMPLE_RATE, createNoiseNode} from 'src/audio';
-import css from './synth.css';
+import audio, {SAMPLE_RATE, createNoiseNode} from '../../audio.ts';
+import css from './synth.module.css';
 
-import Envelope from 'src/components/modules/envelope.jsx';
-import Keyboard from 'src/components/modules/keyboard.jsx';
-import WavePlot from 'src/components/modules/wave-plot.jsx';
+import Envelope from '../modules/envelope.tsx';
+import Keyboard from '../modules/keyboard.tsx';
+import WavePlot from '../modules/wave-plot.tsx';
 
 
 export default class EnvelopeShaper extends Component {
@@ -145,7 +145,7 @@ export default class EnvelopeShaper extends Component {
       this.setState({progress: null});
     } else {
       this.setState({progress});
-      requestAnimationFrame(::this.animate);
+      requestAnimationFrame(this.animate.bind(this));
     }
   }
 }
