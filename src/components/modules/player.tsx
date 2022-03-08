@@ -4,8 +4,8 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import audio from 'src/audio';
-import css from 'src/components/synths/synth.css';
+import audio from '../../audio.ts';
+import css from '../synths/synth.module.css';
 
 
 export default class SoundPlayer extends Component {

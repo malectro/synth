@@ -4,11 +4,11 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import {SAMPLE_RATE} from 'src/audio';
-import css from './synth.css';
+import {SAMPLE_RATE} from '../../audio.ts';
+import css from './synth.module.css';
 
-import SoundPlayer from 'src/components/modules/buffer-player.jsx';
-import Slider from 'src/components/ui/slider.jsx';
+import SoundPlayer from '../modules/buffer-player.tsx';
+import Slider from '../ui/slider.tsx';
 
 
 const noiseTime = 1;

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router';
+import Link from 'next/link';
 
-import lessonCss from './lesson.css';
+import lessonCss from './lesson.module.css';
 
-import Noise from 'src/components/synths/noise.jsx';
-import NoiseLooped from 'src/components/synths/noise-looped.jsx';
-import NoiseLooper from 'src/components/synths/noise-looper.jsx';
+import Noise from '../synths/noise.jsx';
+import NoiseLooped from '../synths/noise-looped.jsx';
+import NoiseLooper from '../synths/noise-looper.jsx';
 
 
 export default function Lesson1() {
@@ -50,7 +50,7 @@ export default function Lesson1() {
 
         <p>In the next lesson I’ll cover basic patterns that influence tone.</p>
 
-        <Link to="/2">Next</Link>
+        <Link href="/2">Next</Link>
       </section>
     </article>
   );

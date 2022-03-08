@@ -1,6 +1,6 @@
 .top {
   /* Font and Text Styles */
-  composes: text from 'src/styles/fonts.css';
+  composes: text from '../styles/fonts.css';
   color: rgba(0, 0, 0, 0.8);
 }
 

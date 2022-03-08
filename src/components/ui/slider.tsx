@@ -6,7 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import classify from 'classify';
 
 import {absolutePosition} from 'src/services/utils';
-import css from './slider.css';
+import css from './slider.module.css';
 
 
 export default class Slider extends Component {
@@ -16,7 +16,7 @@ export default class Slider extends Component {
     value: number,
     max: number,
     min: number,
-    className: ?string,
+    className?: string | null,
     onChange: (value: number) => void,
     orientation: 'horizontal' | 'vertical',
   };

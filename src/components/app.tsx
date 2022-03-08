@@ -1,9 +1,6 @@
-/* @flow */
-
 import React from 'react';
 
-import './base.global.css';
-import appCss from './app.css';
+import appCss from './app.module.css';
 
 
 type Props = {

@@ -2,12 +2,12 @@
 
 import React, {PureComponent} from 'react';
 
-import Canvas from 'src/components/ui/canvas.jsx';
+import Canvas from '../ui/canvas.tsx';
 
 
 export default class XYPlot extends PureComponent {
   props: {
-    className: ?string,
+    className?: string | null,
     points: {
       x: number,
       y: number,
@@ -85,7 +85,7 @@ export default class XYPlot extends PureComponent {
     const ratio = points.length / limit;
     const span = Math.floor(ratio);
 
-    const sampler = sample === 'average' ? ::this.sampleAverage : ::this.sampleOne;
+    const sampler = sample === 'average' ? this.sampleAverage.bind(this) : this.sampleOne.bind(this);
 
     if (limit < points.length) {
       for (let i = 0; i < limit; i++) {

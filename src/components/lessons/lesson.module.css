@@ -4,7 +4,7 @@
 }
 
 .title {
-  composes: title from 'src/styles/fonts.css';
+  composes: title from '../../styles/fonts.css';
 }
 
 .article section {

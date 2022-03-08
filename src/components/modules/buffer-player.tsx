@@ -5,10 +5,10 @@ import {assign} from 'sculpt';
 import React, {Component} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import audio, {SAMPLE_RATE} from 'src/audio';
+import audio, {SAMPLE_RATE} from '../../audio.ts';
 
-import XYPlot from './XYPlot.jsx';
-import SourcePlayer from 'src/components/modules/player.jsx';
+import XYPlot from './XYPlot.tsx';
+import SourcePlayer from './player.tsx';
 
 
 export default class BufferSoundPlayer extends Component {
