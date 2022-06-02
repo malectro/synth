@@ -19,6 +19,13 @@ class SimpleWaveformPlot extends PureComponent {
     this.draw = this.draw.bind(this);
   }
 
+  componentDidMount() {
+    // ugh
+    setTimeout(() => {
+      this.draw();
+    }, 100);
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.type !== this.props.type || prevProps.repeat !== this.props.repeat) {
       this.draw();
@@ -34,7 +41,6 @@ class SimpleWaveformPlot extends PureComponent {
 
   draw() {
     const {canvas} = this;
-
     if (!canvas) {
       return;
     }

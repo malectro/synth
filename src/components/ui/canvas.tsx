@@ -39,7 +39,7 @@ export default class Canvas extends PureComponent {
     this.resize(this.props);
   }
 
-  componentWillReceiveProps(props) {
+  componentDidUpdate(props) {
     if (props.size !== this.props.size) {
       this.resize(props);
     }
