@@ -4,14 +4,9 @@
   "description": "synth is an interactive tutorial on synthetic sound.",
   "main": "index.js",
   "scripts": {
-    "start": "node build/server/index.js",
+    "start": "next dev",
     "start:dev": "next dev",
-    "start:hot": "HMR=true npm run start:dev",
-    "build": "webpack",
-    "build:dev": "NODE_ENV=development webpack -w",
-    "build:hot": "HMR=true npm run build:dev",
-    "hot": "NODE_ENV=development node webpack-dev-server.js",
-    "flow": "flow",
+    "build": "next build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
